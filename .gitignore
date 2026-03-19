@@ -1,0 +1,11 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Shell scripts (temp files, logs, etc if any are generated)
+*.log
+*.tmp
+*.swp
