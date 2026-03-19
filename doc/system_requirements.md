@@ -46,7 +46,7 @@ Rationale:
 
 End users of a debian-derived Linux distribution use this package type to install an application.
 
-Nees: req
+Needs: req
 
 ## High Level Requirements
 
@@ -56,6 +56,18 @@ Nees: req
 The packages are built with the package building tools provided by the Debian project.
 
 This project assumes that the build environment is Debian or a derived distribution.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#feat~debian-binary-package~1)
+
+Needs: dsn
+
+### Precondition Check
+`req~precondition-check~1`
+
+The package maintainer runs a script that verifies that the preconditions are fulfilled before starting the actual package build. If anything is missing on the build system, the script lists commands to execute to install the missing parts.
 
 Covers:
 
@@ -140,6 +152,22 @@ Rationale:
 
 Debian packages require consistent metadata to ensure proper identification, licensing compliance, and user information.
 This metadata is used by package managers and documentation tools.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Debian Changelog
+`req~debian-changelog~1`
+
+The debian-style change log is derived from the changelog Markdown files found in the project under `doc/changes`. The debian changelog only gets appended to, never rewritten.
+
+Rationale:
+
+OFT already has a well-maintained changelog that serves as the source of truth for the package changelog. Appending ensures that reviewed changes are not modified. This is especially useful when the new entries are extracted automatically with a tool and need human review.
 
 Covers:
 
