@@ -3,9 +3,9 @@
 This task list is based on the [OpenFastTrace Debian Package Design](design.md).
 
 ## Phase 1: Environment and Project Initialization
-1. - [ ] Install necessary build tools: `dpkg-dev`, `debhelper`, and `devscripts` (`dsn~build-tools~1`).
-2. - [ ] Create the `debian/` directory structure in the project root (`dsn~debian-metadata~1`).
-3. - [ ] Implement `check-preconditions.sh` to verify the build environment (`dsn~precondition-check~1`, `req~precondition-check~1`).
+1. - [x] Install necessary build tools: `dpkg-dev`, `debhelper`, and `devscripts` (`dsn~build-tools~1`).
+2. - [x] Create the `debian/` directory structure in the project root (`dsn~debian-metadata~1`).
+3. - [x] Implement `check-preconditions.sh` to verify the build environment (`dsn~precondition-check~1`, `req~precondition-check~1`).
 
 ## Phase 2: Debian Package Metadata Setup
 4. - [ ] Create `debian/control` with metadata: organization, maintainers, URLs (Homepage/Source), and descriptions (`dsn~debian-metadata~1`, `req~package-metadata~1`).
