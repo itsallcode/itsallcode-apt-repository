@@ -8,10 +8,10 @@ This task list is based on the [OpenFastTrace Debian Package Design](design.md).
 3. - [x] Implement `check-preconditions.sh` to verify the build environment (`dsn~precondition-check~1`, `req~precondition-check~1`).
 
 ## Phase 2: Debian Package Metadata Setup
-4. - [ ] Create `debian/control` with metadata: organization, maintainers, URLs (Homepage/Source), and descriptions (`dsn~debian-metadata~1`, `req~package-metadata~1`).
-5. - [ ] Create `debian/copyright` with GPL-3.0 license and authorship information (`dsn~debian-metadata~1`, `req~package-metadata~1`).
-6. - [ ] Create `debian/rules` as a standard build script for `dpkg-buildpackage` (`dsn~debian-metadata~1`).
-7. - [ ] Initialize the `debian/changelog` file with the required initial metadata (`dsn~debian-metadata~1`).
+4. - [x] Create `debian/control` with metadata: organization, maintainer, URLs (Homepage/Source), and descriptions (`dsn~debian-metadata~1`, `req~package-metadata~1`).
+5. - [x] Create `debian/copyright` with GPL-3.0 license and upstream authors information (`dsn~debian-metadata~1`, `req~package-metadata~1`).
+6. - [x] Create `debian/rules` as a standard build script for `dpkg-buildpackage` (`dsn~debian-metadata~1`).
+7. - [x] Initialize the `debian/changelog` file with the required initial metadata (`dsn~debian-metadata~1`).
 
 ## Phase 3: Source Package Automation (`create-source-package.sh`)
 8. - [ ] Implement command-line version argument parsing (`<major>.<minor>.<fix>`) in the build orchestration scripts (`dsn~version-input~1`).

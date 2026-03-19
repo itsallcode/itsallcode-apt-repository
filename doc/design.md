@@ -65,9 +65,9 @@ Needs: impl, itest
 `dsn~debian-metadata~1`
 
 The project will maintain a `debian/` directory containing the standard metadata files:
-* `control`: Package information, dependencies, and descriptions.
+* `control`: Package information, dependencies, and descriptions (using the specified Debian Package Maintainer).
 * `changelog`: Version history and maintainer information.
-* `copyright`: License and authorship information.
+* `copyright`: License and authorship information (using the specified Upstream Authors).
 * `rules`: Build instructions for `dpkg-buildpackage`.
 
 These files will be populated with the constant metadata defined in the requirements.

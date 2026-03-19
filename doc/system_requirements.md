@@ -139,7 +139,8 @@ Needs: dsn
 The packages must include the following constant metadata:
 
 * Organization: itsallcode
-* Maintainers:
+* Debian Package Maintainer: Sebastian Bär <sebastian@baer.zone>
+* Upstream Authors:
   * Christoph Pirkl <christoph@chp1.net>
   * Sebastian Bär <sebastian@baer.zone>
 * Homepage URL: https://github.com/itsallcode/openfasttrace
