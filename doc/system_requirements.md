@@ -121,6 +121,28 @@ Covers:
 
 Needs: dsn
 
+### Binary Dependencies
+`req~binary-dependencies~1`
+
+The binary package for OFT declares a dependency on the OpenJDK headless package version 17 or later.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### OFT Wrapper Script
+`req~oft-wrapper-script~1`
+
+The OFT binary package contains a wrapper shell script called `oft` that wraps the CLI client in the OFT java library.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
 ### Reproducible Build From Source Package
 `req~reproducible-build-from-source-package~1`
 

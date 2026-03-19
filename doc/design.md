@@ -6,6 +6,8 @@ This document describes the design of the OpenFastTrace Debian Package project.
 
 This design uses the OFT requirement notation explained in the [OFT user guide](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md).
 
+Requirements in this document are always formulated in present as if they were already implemented. This fits with the idea that OFT specs are traced down to implementation and test and are also up to date.
+
 ## Components
 
 ### Build Environment and Tools
@@ -54,7 +56,7 @@ Needs: impl, itest
 ### Source Fetching from GitHub
 `dsn~source-fetching~1`
 
-The `create-source-package.sh` script will use `curl` or `wget` to download the OpenFastTrace source code for the specified version directly from GitHub as a `.tar.gz` archive.
+The `create-source-package.sh` script uses `wget` to download the OpenFastTrace source code for the specified version directly from GitHub as a `.tar.gz` archive from `https://github.com/itsallcode/openfasttrace/archive/refs/tags/<version>.tar.gz` where `<version>` is the version number of OFT for which the package should be built.
 
 Covers:
 * [`req~binary-package-from-git-hub-release~1`](system_requirements.md#binary-package-from-git-hub-release)
@@ -64,16 +66,36 @@ Needs: impl, itest
 ### Debian Package Structure and Metadata
 `dsn~debian-metadata~1`
 
-The project will maintain a `debian/` directory containing the standard metadata files:
+The project maintains a `debian/` directory containing the standard metadata files:
 * `control`: Package information, dependencies, and descriptions (using the specified Debian Package Maintainer).
 * `changelog`: Version history and maintainer information.
 * `copyright`: License and authorship information (using the specified Upstream Authors).
 * `rules`: Build instructions for `dpkg-buildpackage`.
 
-These files will be populated with the constant metadata defined in the requirements.
+These files are populated with the constant metadata defined in the requirements.
 
 Covers:
 * [`req~package-metadata~1`](system_requirements.md#package-metadata)
+
+Needs: impl, itest
+
+### Binary Dependencies
+`dsn~binary-dependencies~1`
+
+The `debian/control` file declares a dependency on `openjdk-17-jre-headless` or a newer version to ensure the runtime environment is available.
+
+Covers:
+* [`req~binary-dependencies~1`](system_requirements.md#binary-dependencies)
+
+Needs: impl, itest
+
+### OFT Wrapper Script
+`dsn~oft-wrapper-script~1`
+
+A shell script named `oft` provides in the binary package (typically installed to `/usr/bin/oft`). This script will facilitate the execution of the OpenFastTrace JAR file by invoking the Java Runtime Environment with the necessary parameters.
+
+Covers:
+* [`req~oft-wrapper-script~1`](system_requirements.md#oft-wrapper-script)
 
 Needs: impl, itest
 
