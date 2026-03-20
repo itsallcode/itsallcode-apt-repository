@@ -14,6 +14,8 @@ declare -A REQUIRED_TOOLS=(
     ["curl"]="curl"
     ["wget"]="wget"
     ["shellcheck"]="shellcheck"
+    ["mvn"]="maven"
+    ["java"]="openjdk-17-jre-headless"
 )
 
 check_tools() {

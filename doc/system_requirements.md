@@ -143,6 +143,28 @@ Covers:
 
 Needs: dsn
 
+### Package Icon Declaration
+`req~package-icon-declaration~1`
+
+The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Package Screenshots
+`req~package-screenshots~1`
+
+The binary package declares the application screenshot from https://github.com/itsallcode/openfasttrace/blob/main/doc/images/oft_screenshot_tracing_report.png in a way that software management applications (like GNOME Software or Discover) can display them.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
 ### Reproducible Build From Source Package
 `req~reproducible-build-from-source-package~1`
 
@@ -191,6 +213,22 @@ The debian-style change log is derived from the changelog Markdown files found i
 Rationale:
 
 OFT already has a well-maintained changelog that serves as the source of truth for the package changelog. Appending ensures that reviewed changes are not modified. This is especially useful when the new entries are extracted automatically with a tool and need human review.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Dedicated Build Directory
+`req~build-directory~1`
+
+The build process for the source and binary package uses a dedicated directory (e.g., `out/`) in the project root to store all generated artifacts.
+
+Rationale:
+
+A dedicated build directory keeps the project root clean and makes it easier to manage and identify generated files. This is a common practice in automated build environments.
 
 Covers:
 

@@ -1,4 +1,34 @@
 #!/usr/bin/make -f
+# dsn~debian-metadata~1
 
 %:
 	dh $@
+
+override_dh_auto_build:
+	mvn clean package -DskipTests
+
+override_dh_auto_install:
+	# Install the JAR
+	mkdir -p debian/openfasttrace/usr/share/java
+	VERSION=$$(dpkg-parsechangelog -S Version | cut -d- -f1); \
+	cp product/target/openfasttrace-$$VERSION.jar debian/openfasttrace/usr/share/java/openfasttrace.jar
+	
+	# Install the wrapper script
+	mkdir -p debian/openfasttrace/usr/bin
+	cp debian/oft debian/openfasttrace/usr/bin/oft
+	chmod +x debian/openfasttrace/usr/bin/oft
+	
+	# Install the icons
+	mkdir -p debian/openfasttrace/usr/share/pixmaps
+	cp core/src/main/resources/openfasttrace_logo.svg debian/openfasttrace/usr/share/pixmaps/openfasttrace.svg
+	cp core/src/main/resources/openfasttrace_logo.png debian/openfasttrace/usr/share/pixmaps/openfasttrace.png
+	
+	# Install desktop file and metainfo
+	mkdir -p debian/openfasttrace/usr/share/applications
+	cp debian/openfasttrace.desktop debian/openfasttrace/usr/share/applications/openfasttrace.desktop
+	mkdir -p debian/openfasttrace/usr/share/metainfo
+	cp debian/org.itsallcode.openfasttrace.metainfo.xml debian/openfasttrace/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml
+
+	# Install screenshots
+	mkdir -p debian/openfasttrace/usr/share/metainfo/screenshots
+	cp debian/screenshots/*.png debian/openfasttrace/usr/share/metainfo/screenshots/

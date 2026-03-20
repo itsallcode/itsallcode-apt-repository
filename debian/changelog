@@ -8,6 +8,114 @@ openfasttrace (4.2.2-1) unstable; urgency=medium
   * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
   * #471: Add tag importer support for SystemVerilog files
 
+ -- Sebastian Bär <sebastian@baer.zone>  Fri, 20 Mar 2026 13:54:27 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Fri, 20 Mar 2026 13:51:29 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Fri, 20 Mar 2026 09:27:38 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Fri, 20 Mar 2026 09:22:11 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 18:08:48 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 18:00:00 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 17:59:27 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 17:50:12 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
+ -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 17:16:58 +0100
+
+openfasttrace (4.2.2-1) unstable; urgency=medium
+
+  * `net.sourceforge.plantuml:plantuml:1.2026.0` → `1.2026.1`
+  * `nl.jqno.equalsverifier:equalsverifier:4.3` → `4.3.1`
+  * `org.junit.jupiter:junit-jupiter-api:6.0.1` → `6.1.0-M1`
+  * `org.junit.jupiter:junit-jupiter-engine:6.0.1` → `6.1.0-M1`
+  * `org.junit.platform:junit-jupiter-params:6.0.1` → `6.1.0-M1`
+  * `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+  * #471: Add tag importer support for SystemVerilog files
+
  -- Sebastian Bär <sebastian@baer.zone>  Thu, 19 Mar 2026 17:07:47 +0100
 
 openfasttrace (4.2.2-1) unstable; urgency=medium

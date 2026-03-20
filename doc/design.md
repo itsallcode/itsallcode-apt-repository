@@ -99,6 +99,38 @@ Covers:
 
 Needs: impl, itest
 
+### Application Icon
+`dsn~app-icon~1`
+
+The application logo is included in the binary package in both SVG and PNG formats. These files are sourced from the OpenFastTrace upstream source code (`core/src/main/resources/openfasttrace_logo.*`) and installed to `/usr/share/pixmaps/openfasttrace.svg` and `/usr/share/pixmaps/openfasttrace.png` respectively.
+
+Covers:
+* [`req~app-icon~1`](system_requirements.md#application-icon)
+
+Needs: impl, itest
+
+### Package Icon Declaration
+`dsn~package-icon-declaration~1`
+
+The package declares its icon using:
+1.  A standard Desktop Entry file (`/usr/share/applications/openfasttrace.desktop`) that specifies `Icon=openfasttrace` and `Terminal=true`.
+2.  AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that references the desktop file and identifies the application to software centers.
+
+Covers:
+* [`req~package-icon-declaration~1`](system_requirements.md#package-icon-declaration)
+
+Needs: impl, itest
+
+### Package Screenshots
+`dsn~package-screenshots~1`
+
+The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) includes a `<screenshots>` section pointing to the screenshot at: https://github.com/itsallcode/openfasttrace/blob/main/doc/images/oft_screenshot_tracing_report.png
+
+Covers:
+* [`req~package-screenshots~1`](system_requirements.md#package-screenshots)
+
+Needs: impl, itest
+
 ### Changelog Extraction
 `dsn~changelog-extraction~1`
 
@@ -120,6 +152,17 @@ The `create-binary-package.sh` script will utilize `dpkg-buildpackage -us -uc -b
 
 Covers:
 * [`req~reproducible-build-from-source-package~1`](system_requirements.md#reproducible-build-from-source-package)
+
+Needs: impl, itest
+
+### Dedicated Build Directory
+`dsn~build-directory~1`
+
+The project uses a dedicated directory named `out/` in the project root to store all build artifacts, including downloaded source archives, extracted directories, and the resulting Debian source and binary packages.
+All build scripts are responsible for creating this directory if it doesn't exist and moving generated artifacts into it.
+
+Covers:
+* [`req~build-directory~1`](system_requirements.md#build-directory)
 
 Needs: impl, itest
 

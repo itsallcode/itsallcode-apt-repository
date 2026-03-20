@@ -2,7 +2,8 @@ Source: openfasttrace
 Section: misc
 Priority: optional
 Maintainer: Sebastian Bär <sebastian@baer.zone>
-Build-Depends: debhelper-compat (= 13)
+Build-Depends: debhelper-compat (= 13), openjdk-17-jdk, maven
+Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Homepage: https://github.com/itsallcode/openfasttrace
 Vcs-Browser: https://github.com/itsallcode/openfasttrace-debian-package
@@ -11,5 +12,8 @@ Vcs-Git: https://github.com/itsallcode/openfasttrace-debian-package.git
 Package: openfasttrace
 Architecture: all
 Depends: ${misc:Depends}, openjdk-17-jre-headless
-Description: Requirement tracing suite for agile projects
- OpenFastTrace (OFT) is a requirement tracing suite. It helps developers and project managers track requirements throughout the software development lifecycle.
+Description: Requirement tracing suite
+ OpenFastTrace (OFT) is a requirement tracing suite. Requirement tracing
+ keeps track of whether you actually implemented everything you planned to
+ in your specifications. It also identifies obsolete parts of your product
+ and helps you to get rid of them.

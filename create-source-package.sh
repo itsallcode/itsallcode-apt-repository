@@ -8,10 +8,15 @@ set -e
 readonly OFT_REPO_URL="https://github.com/itsallcode/openfasttrace"
 readonly DEBFULLNAME="Sebastian Bär"
 readonly DEBEMAIL="sebastian@baer.zone"
+readonly BUILD_DIR="out"
 export DEBFULLNAME DEBEMAIL
 
 verify_preconditions() {
     ./check-preconditions.sh
+}
+
+ensure_build_dir() {
+    mkdir -p "$BUILD_DIR"
 }
 
 parse_version() {
@@ -25,7 +30,7 @@ parse_version() {
 
 download_source() {
     local version="$1"
-    local tarball="openfasttrace-$version.tar.gz"
+    local tarball="$BUILD_DIR/openfasttrace-$version.tar.gz"
     local url="$OFT_REPO_URL/archive/refs/tags/$version.tar.gz"
 
     echo "Downloading source for version $version..."
@@ -34,13 +39,16 @@ download_source() {
 
 extract_source() {
     local tarball="$1"
+    local version="$2"
     echo "Extracting source $tarball..."
-    tar -xzf "$tarball"
+    # Ensure a clean extraction directory to avoid issues with stale files from previous builds
+    rm -rf "$BUILD_DIR/openfasttrace-$version"
+    tar -xzf "$tarball" -C "$BUILD_DIR"
 }
 
 update_changelog() {
     local version="$1"
-    local source_dir="openfasttrace-$version"
+    local source_dir="$BUILD_DIR/openfasttrace-$version"
     local changes_dir="$source_dir/doc/changes"
 
     echo "Updating debian/changelog from $changes_dir..."
@@ -99,26 +107,24 @@ update_changelog() {
 
 prepare_debian_source() {
     local version="$1"
-    local source_dir="openfasttrace-$version"
-    local orig_tarball="openfasttrace_$version.orig.tar.gz"
+    local source_dir="$BUILD_DIR/openfasttrace-$version"
+    local orig_tarball="$BUILD_DIR/openfasttrace_$version.orig.tar.gz"
 
     # Debian expects the upstream tarball to be named <package>_<version>.orig.tar.gz
-    cp "openfasttrace-$version.tar.gz" "$orig_tarball"
+    cp "$BUILD_DIR/openfasttrace-$version.tar.gz" "$orig_tarball"
 
     # Copy debian/ directory into the extracted source
     cp -r debian/ "$source_dir/"
 
     echo "Creating Debian source package..."
-    cd "$source_dir"
-    dpkg-source -b .
-    cd ..
+    # Artifacts are created in the parent directory of where dpkg-source is run
+    (cd "$source_dir" && dpkg-source -b .)
 }
 
 cleanup() {
     local version="$1"
-    echo "Cleaning up..."
-    rm -rf "openfasttrace-$version"
-    # We keep the .orig.tar.gz and other generated files in the parent directory
+    echo "Cleaning up extraction directory..."
+    rm -rf "$BUILD_DIR/openfasttrace-$version"
 }
 
 main() {
@@ -131,13 +137,14 @@ main() {
     version=$(parse_version "$1")
     
     verify_preconditions
+    ensure_build_dir
     download_source "$version"
-    extract_source "openfasttrace-$version.tar.gz"
+    extract_source "$BUILD_DIR/openfasttrace-$version.tar.gz" "$version"
     update_changelog "$version"
     prepare_debian_source "$version"
     cleanup "$version"
 
-    echo "Source package for version $version created successfully."
+    echo "Source package for version $version created successfully in $BUILD_DIR."
 }
 
 main "$@"

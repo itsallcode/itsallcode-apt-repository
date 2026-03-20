@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=OpenFastTrace
+Comment=Requirement tracing suite for agile projects
+Exec=oft
+Icon=openfasttrace
+Terminal=true
+Categories=Development;
+Keywords=tracing;requirements;agile;
