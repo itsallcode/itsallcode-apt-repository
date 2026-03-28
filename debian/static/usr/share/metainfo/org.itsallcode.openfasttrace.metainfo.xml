@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>org.itsallcode.openfasttrace</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <name>OpenFastTrace</name>
+  <summary>Requirement tracing suite</summary>
+  <description>
+    <p>
+      OpenFastTrace (OFT) is a requirement tracing suite. Requirement tracing
+      keeps track of whether you actually implemented everything you planned to
+      in your specifications. It also identifies obsolete parts of your product
+      and helps you to get rid of them.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.itsallcode.openfasttrace.desktop</launchable>
+  <icon type="themed">org.itsallcode.openfasttrace</icon>
+  <screenshots>
+    <screenshot type="default">
+      <caption>OpenFastTrace tracing report</caption>
+      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>OpenFastTrace help output</caption>
+      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>OpenFastTrace markdown import trace</caption>
+      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/itsallcode/openfasttrace</url>
+  <developer id="org.itsallcode">
+    <name>itsallcode</name>
+  </developer>
+  <content_rating type="oars-1.1" />
+  <provides>
+    <binary>oft</binary>
+  </provides>
+</component>
