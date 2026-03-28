@@ -16,6 +16,9 @@ declare -A REQUIRED_TOOLS=(
     ["shellcheck"]="shellcheck"
     ["mvn"]="maven"
     ["java"]="openjdk-17-jre-headless"
+    ["pandoc"]="pandoc"
+    ["appstreamcli"]="appstream"
+    ["convert"]="imagemagick"
 )
 
 check_tools() {

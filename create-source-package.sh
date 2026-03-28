@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # create-source-package.sh - Automates the creation of the Debian source package
-# dsn~build-orchestration-scripts~1, dsn~version-input~1, dsn~source-fetching~1, dsn~changelog-extraction~1
+# dsn~build-orchestration-scripts~1, dsn~version-input~1, dsn~source-fetching~1, dsn~changelog-extraction~1, dsn~package-screenshots~1
 
 set -e
 
@@ -35,6 +35,27 @@ download_source() {
 
     echo "Downloading source for version $version..."
     wget -O "$tarball" "$url"
+}
+
+download_screenshots() {
+    local screenshots_dir="debian/static/usr/share/metainfo/screenshots"
+    local raw_url="https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images"
+    local screenshots=(
+        "oft_screenshot_tracing_report.png"
+        "oft_screenshot_help.png"
+        "oft_screenshot_markdown_import_trace.png"
+    )
+
+    echo "Downloading up-to-date screenshots from upstream main branch..."
+    mkdir -p "$screenshots_dir"
+    
+    # Remove old screenshots to ensure only the requested ones are included
+    rm -f "$screenshots_dir"/*.png
+
+    for img in "${screenshots[@]}"; do
+        echo "  Downloading $img..."
+        wget -q -O "$screenshots_dir/$img" "$raw_url/$img"
+    done
 }
 
 extract_source() {
@@ -114,6 +135,11 @@ prepare_debian_source() {
     cp "$BUILD_DIR/openfasttrace-$version.tar.gz" "$orig_tarball"
 
     # Copy debian/ directory into the extracted source
+    # We exclude the temporary 'openfasttrace' directory that might contain build artifacts
+    # or static content if a build was previously attempted.
+    # However, we DO need the pre-placed icons and desktop files, so we make sure
+    # to include them if they exist in our source debian/ directory.
+    # rsync -a --exclude='openfasttrace/usr/share/images/' --exclude='openfasttrace/usr/share/icons/hicolor/*x*/' debian/ "$source_dir/debian/"
     cp -r debian/ "$source_dir/"
 
     echo "Creating Debian source package..."
@@ -139,6 +165,7 @@ main() {
     verify_preconditions
     ensure_build_dir
     download_source "$version"
+    download_screenshots
     extract_source "$BUILD_DIR/openfasttrace-$version.tar.gz" "$version"
     update_changelog "$version"
     prepare_debian_source "$version"

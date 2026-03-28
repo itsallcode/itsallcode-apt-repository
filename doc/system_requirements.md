@@ -135,7 +135,7 @@ Needs: dsn
 ### OFT Wrapper Script
 `req~oft-wrapper-script~1`
 
-The OFT binary package contains a wrapper shell script called `oft` that wraps the CLI client in the OFT java library.
+The OFT binary package contains a wrapper shell script called `oft` that wraps the CLI client in the OFT Java library.
 
 Covers:
 
@@ -146,7 +146,22 @@ Needs: dsn
 ### Package Icon Declaration
 `req~package-icon-declaration~1`
 
-The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself.
+The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself. It uses a standard icon theme directory (e.g., `/usr/share/icons/hicolor/scalable/apps/`) and an AppStream ID that matches the desktop file name. As the application brings its own icons, it declares the icon "themed" in the metadata.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Scaled App Icons
+`req~scaled-app-icons~1`
+
+The binary package installs the app icons in various sizes and scales (including @2 for high-DPI displays). These icons are generated from the SVG icon during the build process and installed to the standard icon theme directory (`/usr/share/icons/hicolor`).
+
+Rationale:
+
+Linux distributions either use SVGs or PNG scaled to sizes from `16x16` all the way up to `1024x1024`. Additionally, hires variants can be found in directories named `16x16@2` and so on. 
 
 Covers:
 
@@ -157,7 +172,13 @@ Needs: dsn
 ### Package Screenshots
 `req~package-screenshots~1`
 
-The binary package declares the application screenshot from https://github.com/itsallcode/openfasttrace/blob/main/doc/images/oft_screenshot_tracing_report.png in a way that software management applications (like GNOME Software or Discover) can display them.
+The binary package packs and declares the application screenshots from the upstream source in a way that software management applications (like GNOME Software or Discover) can display them. To ensure wide compatibility with AppStream standards while providing local assets, the screenshots are packed within the binary package and also referenced using stable raw GitHub URLs in the AppStream metadata.
+
+The image URLs are as follows: 
+
+1. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png
+2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png
+2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png
 
 Covers:
 
@@ -201,6 +222,28 @@ This metadata is used by package managers and documentation tools.
 Covers:
 
 * [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### HTML User Guide in Binary Package
+`req~user-guide-html~1`
+
+The build process takes the file `doc/user_guide.md`, turns it into HTML and packages it into the binary package.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Man Page User Guide in Binary Package
+`req~user-guide-manpage~1`
+
+The build process takes the file `doc/user_guide.md`, turns it into a manpage and packages it into the binary package.
+
+Covers:
+
 * [`feat~debian-binary-package~1`](#debian-binary-package)
 
 Needs: dsn

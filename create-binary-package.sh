@@ -60,7 +60,7 @@ main() {
     # We run it from within the BUILD_DIR to ensure it finds the tarballs
     (cd "$BUILD_DIR" && dpkg-source -x "$(basename "$dsc_file")")
 
-    echo "Building binary package..."
+    echo "Building binary package (including HTML and manpage user guide)..."
     # Run dpkg-buildpackage -us -uc -b from within the extracted source
     (cd "$build_subdir" && dpkg-buildpackage -us -uc -b)
 

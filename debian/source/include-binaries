@@ -1,3 +1,3 @@
-debian/screenshots/OFT_help.png
-debian/screenshots/OFT_self_trace.png
-debian/screenshots/OFT_markdown_import_trace.png
+debian/static/usr/share/metainfo/screenshots/oft_screenshot_tracing_report.png
+debian/static/usr/share/metainfo/screenshots/oft_screenshot_help.png
+debian/static/usr/share/metainfo/screenshots/oft_screenshot_markdown_import_trace.png

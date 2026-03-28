@@ -13,7 +13,7 @@ Requirements in this document are always formulated in present as if they were a
 ### Build Environment and Tools
 `dsn~build-tools~1`
 
-The project relies on standard Debian package building tools such as `dpkg-dev`, `debhelper`, and `devscripts`. These tools must be installed on a Debian or derived distribution to facilitate the build process.
+The project relies on standard Debian package building tools such as `dpkg-dev`, `debhelper`, `devscripts`, and `imagemagick`. These tools must be installed on a Debian or derived distribution to facilitate the build process.
 
 Covers:
 * [`req~debian-build-environment~1`](system_requirements.md#debian-build-environment)
@@ -72,6 +72,8 @@ The project maintains a `debian/` directory containing the standard metadata fil
 * `copyright`: License and authorship information (using the specified Upstream Authors).
 * `rules`: Build instructions for `dpkg-buildpackage`.
 
+To simplify the installation process, static content like the desktop file, icons, and AppStream metainfo are pre-placed in the `debian/static/` directory, reflecting their final installation paths in the binary package. The `rules` file is responsible for moving this content to the correct locations and installing any additional generated artifacts.
+
 These files are populated with the constant metadata defined in the requirements.
 
 Covers:
@@ -102,10 +104,13 @@ Needs: impl, itest
 ### Application Icon
 `dsn~app-icon~1`
 
-The application logo is included in the binary package in both SVG and PNG formats. These files are sourced from the OpenFastTrace upstream source code (`core/src/main/resources/openfasttrace_logo.*`) and installed to `/usr/share/pixmaps/openfasttrace.svg` and `/usr/share/pixmaps/openfasttrace.png` respectively.
+The application logo is included in the binary package in SVG and multiple PNG formats. A square SVG app icon is pre-placed in the project at `debian/static/usr/share/icons/hicolor/scalable/apps/org.itsallcode.openfasttrace.svg` to serve as the source for all icons. This specific icon is used instead of the rectangular upstream logo.
+
+PNG icons in various sizes (from 16x16 up to 1024x1024) and scales (including @2) are generated from this square SVG icon during the build process using ImageMagick's `convert` tool and installed to their respective `/usr/share/icons/hicolor/<size>/apps/org.itsallcode.openfasttrace.png` or `/usr/share/icons/hicolor/<size>@2/apps/org.itsallcode.openfasttrace.png` directories to support modern icon themes and AppStream indexing.
 
 Covers:
 * [`req~app-icon~1`](system_requirements.md#application-icon)
+* [`req~scaled-app-icons~1`](system_requirements.md#scaled-app-icons)
 
 Needs: impl, itest
 
@@ -113,8 +118,8 @@ Needs: impl, itest
 `dsn~package-icon-declaration~1`
 
 The package declares its icon using:
-1.  A standard Desktop Entry file (`/usr/share/applications/openfasttrace.desktop`) that specifies `Icon=openfasttrace` and `Terminal=true`.
-2.  AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that references the desktop file and identifies the application to software centers.
+1.  A standard Desktop Entry file (`/usr/share/applications/org.itsallcode.openfasttrace.desktop`) that specifies `Icon=org.itsallcode.openfasttrace` and `Terminal=true`.
+2.  AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that references the desktop file and identifies the application with `<launchable type="desktop-id">org.itsallcode.openfasttrace.desktop</launchable>` and `<icon type="themed">org.itsallcode.openfasttrace</icon>`.
 
 Covers:
 * [`req~package-icon-declaration~1`](system_requirements.md#package-icon-declaration)
@@ -124,10 +129,30 @@ Needs: impl, itest
 ### Package Screenshots
 `dsn~package-screenshots~1`
 
-The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) includes a `<screenshots>` section pointing to the screenshot at: https://github.com/itsallcode/openfasttrace/blob/main/doc/images/oft_screenshot_tracing_report.png
+The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) includes a `<screenshots>` section. For maximum compatibility with AppStream validation tools and software centers, screenshots are referenced via stable raw GitHub URLs from the upstream repository's main branch. To ensure offline availability and support for all tools, these images are also downloaded during the build process and packed into the package at `/usr/share/metainfo/screenshots/`.
 
 Covers:
 * [`req~package-screenshots~1`](system_requirements.md#package-screenshots)
+
+Needs: impl, itest
+
+### HTML User Guide
+`dsn~user-guide-html~1`
+
+The build process uses `pandoc` to convert the `doc/user_guide.md` file from the upstream source into an HTML version. This file is installed into the binary package at `/usr/share/doc/openfasttrace/user_guide.html`.
+
+Covers:
+* [`req~user-guide-html~1`](system_requirements.md#html-user-guide-in-binary-package)
+
+Needs: impl, itest
+
+### Man Page User Guide
+`dsn~user-guide-manpage~1`
+
+The build process uses `pandoc` to convert the `doc/user_guide.md` file from the upstream source into a manpage format. The generated manpage is installed into the binary package at `/usr/share/man/man1/oft.1.gz`.
+
+Covers:
+* [`req~user-guide-manpage~1`](system_requirements.md#man-page-user-guide-in-binary-package)
 
 Needs: impl, itest
 

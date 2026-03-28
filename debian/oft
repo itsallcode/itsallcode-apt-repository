@@ -1,7 +1,0 @@
-#!/bin/sh
-# dsn~oft-wrapper-script~1, req~oft-wrapper-script~1
-# This script facilitates the execution of the OpenFastTrace JAR file.
-set -e
-
-# Execute the OpenFastTrace JAR with the provided arguments
-exec java -jar /usr/share/java/openfasttrace.jar "$@"
