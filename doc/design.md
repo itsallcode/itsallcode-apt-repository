@@ -28,7 +28,7 @@ The "Needs" field in a requirement tells OFT, which artifact types are required 
 ### Build Environment and Tools
 `dsn~build-tools~1`
 
-The project relies on standard Debian package building tools such as `dpkg-dev`, `debhelper`, `devscripts`, and `imagemagick`. These tools must be installed on a Debian or derived distribution to facilitate the build process.
+The project relies on standard Debian package building tools such as `dpkg-dev`, `debhelper`, `devscripts`, `pandoc`, and `imagemagick`. These tools must be installed on a Debian or derived distribution to facilitate the build process.
 
 Covers:
 * [`req~debian-build-environment~1`](system_requirements.md#debian-build-environment)
@@ -94,7 +94,7 @@ These files are populated with the constant metadata defined in the requirements
 Covers:
 * [`req~package-metadata~1`](system_requirements.md#package-metadata)
 
-Needs: itest
+Needs: impl,itest
 
 ### Binary Dependencies
 `dsn~binary-dependencies~1`
@@ -126,7 +126,7 @@ PNG icons in various sizes (from 16x16 up to 1024x1024) and scales (including @2
 Covers:
 * [`req~scaled-app-icons~1`](system_requirements.md#scaled-app-icons)
 
-Needs: itest
+Needs: impl,itest
 
 ### Package AppStream Metadata
 `dsn~package-appstream-metadata~1`
@@ -136,7 +136,7 @@ The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metain
 Covers:
 * [`req~package-appstream-metadata~1`](system_requirements.md#package-appstream-metadata)
 
-Needs: itest
+Needs: impl,itest
 
 ### Package Icon Declaration
 `dsn~package-icon-declaration~1`
@@ -148,7 +148,7 @@ The package declares its icon using:
 Covers:
 * [`req~package-icon-declaration~1`](system_requirements.md#package-icon-declaration)
 
-Needs: itest
+Needs: impl,itest
 
 ### Package Screenshots
 `dsn~package-screenshots~1`

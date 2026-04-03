@@ -1,38 +1,25 @@
 #!/usr/bin/make -f
-# dsn~debian-metadata~1
 
 %:
 	dh $@
 
-# [impl->dsn~debian-metadata~1]
-# [impl->dsn~user-guide-html~1]
-# [impl->dsn~user-guide-manpage~1]
 override_dh_auto_build:
 	mvn clean package -DskipTests
 	# Generate user guide in HTML and manpage formats
-	# [impl->dsn~user-guide-html~1]
 	pandoc -s doc/user_guide.md -o user_guide.html
-	# [impl->dsn~user-guide-manpage~1]
 	pandoc -s doc/user_guide.md -t man -o oft.1
-	# [impl->dsn~user-guide-manpage~1]
 	gzip -9n oft.1
 
-# [impl->dsn~debian-metadata~1]
-# [impl->dsn~app-icon~1]
-# [impl->dsn~user-guide-html~1]
-# [impl->dsn~user-guide-manpage~1]
 override_dh_auto_install:
 	# Install the static content (desktop file, icons, wrapper script, metainfo)
 	mkdir -p debian/openfasttrace
 	cp -r debian/static/* debian/openfasttrace/
-	# [impl->dsn~debian-metadata~1]
 	# Install the JAR
 	mkdir -p debian/openfasttrace/usr/share/java
 	VERSION=$$(dpkg-parsechangelog -S Version | cut -d- -f1); \
 	cp product/target/openfasttrace-$$VERSION.jar debian/openfasttrace/usr/share/java/openfasttrace.jar
 
 	# Generate PNG icons from the square SVG in various sizes and scales
-	# [impl->dsn~app-icon~1]
 	SVG_SOURCE=debian/static/usr/share/icons/hicolor/scalable/apps/org.itsallcode.openfasttrace.svg; \
 	for size_spec in 16x16 16x16@2 20x20 22x22 22x22@2 24x24 24x24@2 30x30 32x32 32x32@2 36x36 36x36@2 42x42 48x48 48x48@2 50x50 64x64 64x64@2 72x72 72x72@2 96x96 96x96@2 100x100 128x128 128x128@2 150x150 160x160 192x192 192x192@2 256x256 256x256@2 512x512 512x512@2 1024x1024; do \
 		size=$${size_spec%@2}; \
@@ -45,9 +32,7 @@ override_dh_auto_install:
 	done
 
 	# Install user guide (HTML and manpage)
-	# [impl->dsn~user-guide-html~1]
 	mkdir -p debian/openfasttrace/usr/share/doc/openfasttrace
 	cp user_guide.html debian/openfasttrace/usr/share/doc/openfasttrace/user_guide.html
-	# [impl->dsn~user-guide-manpage~1]
 	mkdir -p debian/openfasttrace/usr/share/man/man1
 	cp oft.1.gz debian/openfasttrace/usr/share/man/man1/oft.1.gz

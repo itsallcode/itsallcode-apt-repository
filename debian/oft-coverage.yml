@@ -1,0 +1,16 @@
+# This file contains the coverage markers for debian/rules, which OpenFastTrace cannot read directly because it has no extension.
+
+# [impl->dsn~debian-metadata~1]
+# [impl->dsn~user-guide-html~1]
+# [impl->dsn~user-guide-manpage~1]
+# [impl->dsn~app-icon~1]
+
+# Coverage for the metadata file which is an XML file but not OFT XML.
+
+# [impl->dsn~package-appstream-metadata~1]
+# [impl->dsn~package-icon-declaration~1]
+# [impl->dsn~package-screenshots~1]
+
+# Coverage for the wrapper script which does not have an extension.
+
+# [impl->dsn~oft-wrapper-script~1]

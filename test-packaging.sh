@@ -10,6 +10,8 @@ readonly BUILD_DIR="out"
 
 # [impl->dsn~integration-testing~1]
 # [itest->dsn~integration-testing~1]
+# [itest->dsn~user-guide-html~1]
+# [itest->dsn~user-guide-manpage~1]
 verify_output_files() {
     local -r version="$1"
     local -r expected_files=(
@@ -40,6 +42,18 @@ verify_output_files() {
         return 1
     fi
     echo "  [ OK ] Found $deb_file"
+
+    echo "Verifying that user guide was generated and included in the build directory..."
+    local -r build_subdir="$BUILD_DIR/openfasttrace-$version"
+    if [[ ! -f "$build_subdir/user_guide.html" ]]; then
+        echo "Error: user_guide.html not found in build directory."
+        return 1
+    fi
+    if [[ ! -f "$build_subdir/oft.1.gz" ]]; then
+        echo "Error: oft.1.gz not found in build directory."
+        return 1
+    fi
+    echo "  [ OK ] User guide files found."
 }
 
 # [impl->dsn~finding-free-shellcheck~1]
