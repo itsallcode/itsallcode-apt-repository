@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="console-application">
+<component type="desktop-application">
   <id>org.itsallcode.openfasttrace</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <name>OpenFastTrace</name>
   <summary>Requirement tracing suite</summary>
   <description>
@@ -18,22 +18,28 @@
   <screenshots>
     <screenshot type="default">
       <caption>OpenFastTrace tracing report</caption>
-      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png</image>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png</image>
     </screenshot>
     <screenshot>
       <caption>OpenFastTrace help output</caption>
-      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png</image>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png</image>
     </screenshot>
     <screenshot>
-      <caption>OpenFastTrace markdown import trace</caption>
-      <image>https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png</image>
+      <caption>OpenFastTrace Markdown import trace</caption>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/itsallcode/openfasttrace</url>
+  <categories>
+    <category>Development</category>
+  </categories>
   <developer id="org.itsallcode">
     <name>itsallcode</name>
   </developer>
   <content_rating type="oars-1.1" />
+  <releases>
+    <release version="4.2.2" date="2024-03-28" />
+  </releases>
   <provides>
     <binary>oft</binary>
   </provides>

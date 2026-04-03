@@ -114,6 +114,16 @@ Covers:
 
 Needs: impl, itest
 
+### Package AppStream Metadata
+`dsn~package-appstream-metadata~1`
+
+The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) is configured as a `desktop-application`. It uses `GPL-3.0-or-later` as the project license and includes a full OARS 1.1 content rating to ensure it is correctly classified by software centers. It also includes release information.
+
+Covers:
+* [`req~package-appstream-metadata~1`](system_requirements.md#package-appstream-metadata)
+
+Needs: impl, itest
+
 ### Package Icon Declaration
 `dsn~package-icon-declaration~1`
 
@@ -212,12 +222,13 @@ The requirements in this section are of a technical nature and don't cover end u
 
 The project adheres to the following clean code principles:
 
-1. Speaking function names instead of comments
+1. Speaking function and variable names instead of comments
 2. Functions have a low complexity
-3. Steps are represented as individual functions
+3. Processing steps are represented as individual functions
 4. Minimal but well-readable implementation
 5. Minimal dependencies
 6. Immutable variables where possible
+7. Local variables where possible
 
 Needs: impl
 

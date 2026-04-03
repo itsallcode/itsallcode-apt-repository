@@ -143,6 +143,22 @@ Covers:
 
 Needs: dsn
 
+### Package AppStream Metadata
+`req~package-appstream-metadata~1`
+
+The binary package includes AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that complies with the AppStream standard. It includes:
+* Component type `desktop-application`.
+* Proper SPDX license identifiers (e.g., `GPL-3.0-or-later`).
+* A non-empty OARS 1.1 content rating.
+* Remote and local screenshot references.
+* Release information.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
 ### Package Icon Declaration
 `req~package-icon-declaration~1`
 

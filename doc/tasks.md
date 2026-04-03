@@ -31,21 +31,22 @@ This task list is based on the [OpenFastTrace Debian Package Design](design.md).
 20. - [x] Include the OpenFastTrace logo as application icons in the binary package: generate PNG icons in 34 sizes and scales from the square SVG icon using ImageMagick (`dsn~app-icon~1`, `req~scaled-app-icons~1`).
 21. - [x] Declare the package icon as "themed" using AppStream metadata and a desktop file (`dsn~package-icon-declaration~1`, `req~package-icon-declaration~1`).
 22. - [x] Declare the application screenshots in the AppStream metadata using stable raw GitHub URLs and ensure they are also downloaded and packed in the package using a static assets directory `debian/static/` to prevent cleanup by `debhelper` during build (`dsn~package-screenshots~1`, `req~package-screenshots~1`).
-23. - [x] Convert the Markdown user guide to HTML and include it in the binary package (`dsn~user-guide-html~1`, `req~user-guide-html~1`).
-24. - [x] Convert the Markdown user guide to a manpage and include it in the binary package (`dsn~user-guide-manpage~1`, `req~user-guide-manpage~1`).
+23. - [x] Provide complete AppStream metadata (type, license, OARS rating, release info) to ensure correct display in software centers like GNOME Software (`dsn~package-appstream-metadata~1`, `req~package-appstream-metadata~1`).
+24. - [x] Convert the Markdown user guide to HTML and include it in the binary package (`dsn~user-guide-html~1`, `req~user-guide-html~1`).
+25. - [x] Convert the Markdown user guide to a manpage and include it in the binary package (`dsn~user-guide-manpage~1`, `req~user-guide-manpage~1`).
 
 ## Phase 5: Integration Testing Automation
-25. - [x] Implement `test-packaging.sh` to automate the full build process and verify the resulting files (`dsn~integration-testing~1`).
-26. - [x] Verify that `test-packaging.sh` calls and validates the output of `check-preconditions.sh` (`dsn~precondition-check~1`).
-27. - [x] Verify that `test-packaging.sh` correctly tests the integration of `create-source-package.sh` and `create-binary-package.sh` (`dsn~build-orchestration-scripts~1`).
-28. - [x] Verify that `test-packaging.sh` checks for all expected Debian artifacts (`dsn~integration-testing~1`).
-29. - [x] Verify that `test-packaging.sh` runs `shellcheck` on all shell scripts (`dsn~integration-testing~1`, `dsn~finding-free-shellcheck~1`).
-30. - [x] Verify that `test-packaging.sh` validates the AppStream metadata using `appstreamcli` (`dsn~integration-testing~1`).
+26. - [x] Implement `test-packaging.sh` to automate the full build process and verify the resulting files (`dsn~integration-testing~1`).
+27. - [x] Verify that `test-packaging.sh` calls and validates the output of `check-preconditions.sh` (`dsn~precondition-check~1`).
+28. - [x] Verify that `test-packaging.sh` correctly tests the integration of `create-source-package.sh` and `create-binary-package.sh` (`dsn~build-orchestration-scripts~1`).
+29. - [x] Verify that `test-packaging.sh` checks for all expected Debian artifacts (`dsn~integration-testing~1`).
+30. - [x] Verify that `test-packaging.sh` runs `shellcheck` on all shell scripts (`dsn~integration-testing~1`, `dsn~finding-free-shellcheck~1`).
+31. - [x] Verify that `test-packaging.sh` validates the AppStream metadata using `appstreamcli` (`dsn~integration-testing~1`).
 
 ## Phase 6: Quality Assurance
-31. - [ ] Perform a manual code review to ensure adherence to clean code principles (`dsn~clean-code-principles~1`).
+32. - [ ] Perform a manual code review to ensure adherence to clean code principles (`dsn~clean-code-principles~1`).
 
 ## Phase 7: Final Verification
-32. - [ ] Execute the full packaging workflow for a known OpenFastTrace release version.
-33. - [ ] Verify the resulting `.deb` package metadata and file contents.
-34. - [ ] Verify that the `debian/changelog` is correctly appended and preserves historical entries.
+33. - [ ] Execute the full packaging workflow for a known OpenFastTrace release version.
+34. - [ ] Verify the resulting `.deb` package metadata and file contents.
+35. - [ ] Verify that the `debian/changelog` is correctly appended and preserves historical entries.
