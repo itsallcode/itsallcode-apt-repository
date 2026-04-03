@@ -8,6 +8,21 @@ This design uses the OFT requirement notation explained in the [OFT user guide](
 
 Requirements in this document are always formulated in present as if they were already implemented. This fits with the idea that OFT specs are traced down to implementation and test and are also up to date.
 
+In the implementation, the covering code is marked with:
+
+```shell
+# [impl->dsn~<id>~<revision>]
+```
+
+Integration tests are marked with:
+
+```shell
+# [itest->dsn~<id>~<revision>]
+```
+Coverage is marked before functions. Multiple coverage markers can appear before the same function. Design, implementation, and test coverage cannot be in the same file.
+
+The "Needs" field in a requirement tells OFT, which artifact types are required to implement or test the requirement. For each required coverage at least one coverage marker must be present.
+
 ## Components
 
 ### Build Environment and Tools
@@ -79,7 +94,7 @@ These files are populated with the constant metadata defined in the requirements
 Covers:
 * [`req~package-metadata~1`](system_requirements.md#package-metadata)
 
-Needs: impl, itest
+Needs: itest
 
 ### Binary Dependencies
 `dsn~binary-dependencies~1`
@@ -89,7 +104,7 @@ The `debian/control` file declares a dependency on `openjdk-17-jre-headless` or 
 Covers:
 * [`req~binary-dependencies~1`](system_requirements.md#binary-dependencies)
 
-Needs: impl, itest
+Needs: itest
 
 ### OFT Wrapper Script
 `dsn~oft-wrapper-script~1`
@@ -109,10 +124,9 @@ The application logo is included in the binary package in SVG and multiple PNG f
 PNG icons in various sizes (from 16x16 up to 1024x1024) and scales (including @2) are generated from this square SVG icon during the build process using ImageMagick's `convert` tool and installed to their respective `/usr/share/icons/hicolor/<size>/apps/org.itsallcode.openfasttrace.png` or `/usr/share/icons/hicolor/<size>@2/apps/org.itsallcode.openfasttrace.png` directories to support modern icon themes and AppStream indexing.
 
 Covers:
-* [`req~app-icon~1`](system_requirements.md#application-icon)
 * [`req~scaled-app-icons~1`](system_requirements.md#scaled-app-icons)
 
-Needs: impl, itest
+Needs: itest
 
 ### Package AppStream Metadata
 `dsn~package-appstream-metadata~1`
@@ -122,7 +136,7 @@ The AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metain
 Covers:
 * [`req~package-appstream-metadata~1`](system_requirements.md#package-appstream-metadata)
 
-Needs: impl, itest
+Needs: itest
 
 ### Package Icon Declaration
 `dsn~package-icon-declaration~1`
@@ -134,7 +148,7 @@ The package declares its icon using:
 Covers:
 * [`req~package-icon-declaration~1`](system_requirements.md#package-icon-declaration)
 
-Needs: impl, itest
+Needs: itest
 
 ### Package Screenshots
 `dsn~package-screenshots~1`
@@ -229,6 +243,8 @@ The project adheres to the following clean code principles:
 5. Minimal dependencies
 6. Immutable variables where possible
 7. Local variables where possible
+8. All user input is validated before use
+9. 100% test coverage
 
 Needs: impl
 
@@ -238,6 +254,3 @@ Needs: impl
 All shell scripts in this project are free of findings in shellcheck.
 
 Needs: impl, itest
-
-
-

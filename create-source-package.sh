@@ -11,36 +11,40 @@ readonly DEBEMAIL="sebastian@baer.zone"
 readonly BUILD_DIR="out"
 export DEBFULLNAME DEBEMAIL
 
+# [impl->dsn~build-orchestration-scripts~1]
 verify_preconditions() {
     ./check-preconditions.sh
 }
 
+# [impl->dsn~build-directory~1]
 ensure_build_dir() {
     mkdir -p "$BUILD_DIR"
 }
 
-parse_version() {
-    local version="$1"
+# [impl->dsn~version-input~1]
+validate_version() {
+    local -r version="$1"
     if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         echo "Error: Invalid version format '$version'. Expected <major>.<minor>.<fix>." >&2
-        exit 1
+        return 1
     fi
-    echo "$version"
 }
 
+# [impl->dsn~source-fetching~1]
 download_source() {
-    local version="$1"
-    local tarball="$BUILD_DIR/openfasttrace-$version.tar.gz"
-    local url="$OFT_REPO_URL/archive/refs/tags/$version.tar.gz"
+    local -r version="$1"
+    local -r tarball="$BUILD_DIR/openfasttrace-$version.tar.gz"
+    local -r url="$OFT_REPO_URL/archive/refs/tags/$version.tar.gz"
 
     echo "Downloading source for version $version..."
     wget -O "$tarball" "$url"
 }
 
+# [impl->dsn~package-screenshots~1]
 download_screenshots() {
-    local screenshots_dir="debian/static/usr/share/metainfo/screenshots"
-    local raw_url="https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images"
-    local screenshots=(
+    local -r screenshots_dir="debian/static/usr/share/metainfo/screenshots"
+    local -r raw_url="https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images"
+    local -r screenshots=(
         "oft_screenshot_tracing_report.png"
         "oft_screenshot_help.png"
         "oft_screenshot_markdown_import_trace.png"
@@ -58,88 +62,85 @@ download_screenshots() {
     done
 }
 
+# [impl->dsn~build-orchestration-scripts~1]
 extract_source() {
-    local tarball="$1"
-    local version="$2"
+    local -r tarball="$1"
+    local -r version="$2"
     echo "Extracting source $tarball..."
     # Ensure a clean extraction directory to avoid issues with stale files from previous builds
     rm -rf "$BUILD_DIR/openfasttrace-$version"
     tar -xzf "$tarball" -C "$BUILD_DIR"
 }
 
+# [impl->dsn~changelog-extraction~1]
+extract_markdown_changes() {
+    local -r change_file="$1"
+    local -r temp_file="$2"
+
+    # Extract lines starting with * or - and clean them up
+    # Simple conversion: strip * or - bullets and use the content
+    grep -E '^\s*[\*\-]\s+' "$change_file" | sed -E 's/^\s*[\*\-]\s+//' > "$temp_file"
+}
+
+# [impl->dsn~changelog-extraction~1]
+apply_changelog_entries() {
+    local -r version="$1"
+    local -r entries_file="$2"
+
+    if [[ ! -s "$entries_file" ]]; then
+        echo "No changes found, using generic message."
+        dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
+        return
+    fi
+
+    local -r first_line=$(head -n 1 "$entries_file")
+    dch --newversion "$version-1" --distribution unstable --force-distribution "$first_line"
+    
+    # Add subsequent lines if they exist
+    tail -n +2 "$entries_file" | while read -r line; do
+        if [[ -n "$line" ]]; then
+            dch --append "$line"
+        fi
+    done
+}
+
+# [impl->dsn~changelog-extraction~1]
 update_changelog() {
-    local version="$1"
-    local source_dir="$BUILD_DIR/openfasttrace-$version"
-    local changes_dir="$source_dir/doc/changes"
+    local -r version="$1"
+    local -r source_dir="$BUILD_DIR/openfasttrace-$version"
+    local -r changes_dir="$source_dir/doc/changes"
+    local -r change_file="$changes_dir/changes_$version.md"
 
     echo "Updating debian/changelog from $changes_dir..."
 
     if [[ ! -d "$changes_dir" ]]; then
         echo "Warning: No changes directory found in source." >&2
-        return
-    fi
-
-    # Find relevant Markdown files in doc/changes
-    # In OFT, changes are usually in files like changes_<version>.md
-    local change_file="$changes_dir/changes_$version.md"
-    if [[ ! -f "$change_file" ]]; then
-        echo "Warning: No change file found for version $version at $change_file" >&2
-        # Fallback: maybe there are other files?
-        # For now, let's assume the file exists as per dsn~changelog-extraction~1
-        # and if not, we just add a generic entry.
         dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
         return
     fi
 
-    # Convert Markdown to Debian changelog format
-    # Simple conversion: strip # headings and use the content as list items
-    # OFT change files usually have:
-    # # <version>
-    # * <change 1>
-    # * <change 2>
-    
-    local temp_changelog_msg
-    temp_changelog_msg=$(mktemp)
-    # Extract lines starting with * or - and clean them up
-    grep -E '^\s*[\*\-]\s+' "$change_file" | sed -E 's/^\s*[\*\-]\s+//' > "$temp_changelog_msg"
-    
-    if [[ ! -s "$temp_changelog_msg" ]]; then
-        echo "No changes found in $change_file, using generic message."
-        echo "New upstream release $version" > "$temp_changelog_msg"
+    if [[ ! -f "$change_file" ]]; then
+        echo "Warning: No change file found for version $version at $change_file" >&2
+        dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
+        return
     fi
 
-    # Update debian/changelog using dch
-    # We use --newversion to set the version and --distribution to set the distribution
-    # We'll use the content of temp_changelog_msg as the first entry and then add others
-    
-    local first_line
-    first_line=$(head -n 1 "$temp_changelog_msg")
-    dch --newversion "$version-1" --distribution unstable --force-distribution "$first_line"
-    
-    # Add subsequent lines if they exist
-    tail -n +2 "$temp_changelog_msg" | while read -r line; do
-        if [[ -n "$line" ]]; then
-            dch --append "$line"
-        fi
-    done
-    
+    local -r temp_changelog_msg=$(mktemp)
+    extract_markdown_changes "$change_file" "$temp_changelog_msg"
+    apply_changelog_entries "$version" "$temp_changelog_msg"
     rm "$temp_changelog_msg"
 }
 
+# [impl->dsn~build-orchestration-scripts~1]
 prepare_debian_source() {
-    local version="$1"
-    local source_dir="$BUILD_DIR/openfasttrace-$version"
-    local orig_tarball="$BUILD_DIR/openfasttrace_$version.orig.tar.gz"
+    local -r version="$1"
+    local -r source_dir="$BUILD_DIR/openfasttrace-$version"
+    local -r orig_tarball="$BUILD_DIR/openfasttrace_$version.orig.tar.gz"
 
     # Debian expects the upstream tarball to be named <package>_<version>.orig.tar.gz
     cp "$BUILD_DIR/openfasttrace-$version.tar.gz" "$orig_tarball"
 
     # Copy debian/ directory into the extracted source
-    # We exclude the temporary 'openfasttrace' directory that might contain build artifacts
-    # or static content if a build was previously attempted.
-    # However, we DO need the pre-placed icons and desktop files, so we make sure
-    # to include them if they exist in our source debian/ directory.
-    # rsync -a --exclude='openfasttrace/usr/share/images/' --exclude='openfasttrace/usr/share/icons/hicolor/*x*/' debian/ "$source_dir/debian/"
     cp -r debian/ "$source_dir/"
 
     echo "Creating Debian source package..."
@@ -147,20 +148,22 @@ prepare_debian_source() {
     (cd "$source_dir" && dpkg-source -b .)
 }
 
-cleanup() {
-    local version="$1"
+# [impl->dsn~build-orchestration-scripts~1]
+cleanup_extraction() {
+    local -r version="$1"
     echo "Cleaning up extraction directory..."
     rm -rf "$BUILD_DIR/openfasttrace-$version"
 }
 
+# [impl->dsn~build-orchestration-scripts~1]
 main() {
     if [[ $# -ne 1 ]]; then
         echo "Usage: $0 <version>" >&2
         exit 1
     fi
 
-    local version
-    version=$(parse_version "$1")
+    local -r version="$1"
+    validate_version "$version"
     
     verify_preconditions
     ensure_build_dir
@@ -169,7 +172,7 @@ main() {
     extract_source "$BUILD_DIR/openfasttrace-$version.tar.gz" "$version"
     update_changelog "$version"
     prepare_debian_source "$version"
-    cleanup "$version"
+    cleanup_extraction "$version"
 
     echo "Source package for version $version created successfully in $BUILD_DIR."
 }

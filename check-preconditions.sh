@@ -7,6 +7,7 @@ set -e
 
 # Define required tools and their corresponding packages
 # Tools are checked for existence in PATH
+# [impl->dsn~build-tools~1]
 declare -A REQUIRED_TOOLS=(
     ["dpkg-buildpackage"]="dpkg-dev"
     ["dh"]="debhelper"
@@ -20,7 +21,9 @@ declare -A REQUIRED_TOOLS=(
     ["appstreamcli"]="appstream"
     ["convert"]="imagemagick"
 )
+readonly REQUIRED_TOOLS
 
+# [impl->dsn~precondition-check~1]
 check_tools() {
     local missing_packages=()
     local all_ok=true
@@ -42,12 +45,17 @@ check_tools() {
         echo "To install the missing packages, run:"
         echo "  sudo apt-get update && sudo apt-get install -y ${missing_packages[*]}"
         return 1
-    else
-        echo ""
-        echo "All preconditions are met."
-        return 0
     fi
+    
+    echo ""
+    echo "All preconditions are met."
+    return 0
+}
+
+# [impl->dsn~precondition-check~1]
+main() {
+    check_tools
 }
 
 # Main execution
-check_tools
+main
