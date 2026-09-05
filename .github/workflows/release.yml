@@ -55,7 +55,6 @@ jobs:
             devscripts \
             dpkg-dev \
             imagemagick \
-            maven \
             openjdk-17-jdk \
             pandoc \
             shellcheck \
