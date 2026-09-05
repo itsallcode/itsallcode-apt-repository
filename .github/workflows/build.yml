@@ -26,13 +26,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: maven
-
       - name: Install Debian build dependencies
         run: |
           sudo apt-get update
@@ -64,6 +57,12 @@ jobs:
           help_output="$(oft --help)"
           printf '%s\n' "$help_output" | grep --extended-regexp --quiet \
             '^OpenFastTrace [0-9]+\.[0-9]+\.[0-9]+$'
+          printf '%s\n' "$help_output" | grep --extended-regexp --quiet \
+            '^Usage:$'
+          printf '%s\n' "$help_output" | grep --extended-regexp --quiet \
+            '^  oft command \[option \.\.\.\] \[<input file or directory> \.\.\.\]$'
+          printf '%s\n' "$help_output" | grep --extended-regexp --quiet \
+            '^Commands:$'
 
       - name: Generate SHA-256 checksums
         run: |
