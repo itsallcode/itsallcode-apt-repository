@@ -1,0 +1,86 @@
+name: Release Debian package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: OpenFastTrace version to package and release
+        required: true
+        type: string
+        default: 4.9.0
+
+jobs:
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+    defaults:
+      run:
+        shell: bash
+    env:
+      VERSION: ${{ inputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fail if not running on main branch
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: actions/github-script@v9
+        with:
+          script: |
+            core.setFailed('Not running on main branch. Start this workflow from main.')
+
+      - name: Install Debian build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes \
+            appstream \
+            curl \
+            debhelper \
+            devscripts \
+            dpkg-dev \
+            imagemagick \
+            maven \
+            openjdk-17-jdk-headless \
+            pandoc \
+            shellcheck \
+            wget
+
+      - name: Create source package
+        run: ./create-source-package.sh "$VERSION"
+
+      - name: Create binary package
+        run: ./create-binary-package.sh "$VERSION"
+
+      - name: Generate SHA-256 checksums
+        run: |
+          (
+            cd out
+            sha256sum \
+              "openfasttrace_${VERSION}.orig.tar.gz" \
+              "openfasttrace_${VERSION}-1.debian.tar.xz" \
+              "openfasttrace_${VERSION}-1.dsc" \
+              "openfasttrace_${VERSION}-1_all.deb"
+          ) > out/SHA256SUMS
+
+      - name: Create GitHub release
+        run: |
+          gh release create "$VERSION" \
+            --target main \
+            --title "OpenFastTrace Debian package $VERSION" \
+            --generate-notes \
+            "out/openfasttrace_${VERSION}.orig.tar.gz" \
+            "out/openfasttrace_${VERSION}-1.debian.tar.xz" \
+            "out/openfasttrace_${VERSION}-1.dsc" \
+            "out/openfasttrace_${VERSION}-1_all.deb" \
+            out/SHA256SUMS
+        env:
+          GH_TOKEN: ${{ github.token }}

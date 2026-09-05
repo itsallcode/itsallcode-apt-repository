@@ -9,3 +9,15 @@ out/
 *.log
 *.tmp
 *.swp
+
+# Debian packaging intermediate files and build results
+/out/
+/openfasttrace-*.tar.gz
+/openfasttrace-*/
+/openfasttrace_*.orig.tar.gz
+/openfasttrace_*.debian.tar.xz
+/openfasttrace_*.diff.gz
+/openfasttrace_*.dsc
+/openfasttrace_*.buildinfo
+/openfasttrace_*.changes
+/openfasttrace_*.deb

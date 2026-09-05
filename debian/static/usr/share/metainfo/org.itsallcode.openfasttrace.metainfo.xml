@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.itsallcode.openfasttrace</id>
+  <pkgname>openfasttrace</pkgname>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>OpenFastTrace</name>
+  <summary>Requirement tracing suite</summary>
+  <description>
+    <p>
+      OpenFastTrace (OFT) is a requirement tracing suite. Requirement tracing
+      keeps track of whether you actually implemented everything you planned to
+      in your specifications. It also identifies obsolete parts of your product
+      and helps you to get rid of them.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.itsallcode.openfasttrace.desktop</launchable>
+  <icon type="stock">org.itsallcode.openfasttrace</icon>
+  <screenshots>
+    <screenshot type="default">
+      <caption>OpenFastTrace tracing report</caption>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>OpenFastTrace help output</caption>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>OpenFastTrace Markdown import trace</caption>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/itsallcode/openfasttrace</url>
+  <categories>
+    <category>Development</category>
+  </categories>
+  <developer id="org.itsallcode">
+    <name>itsallcode</name>
+  </developer>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="4.9.0" date="2026-09-05" type="stable">
+      <description>
+        <ul>
+          <li>Importers for long coverage tags, Markdown, and reStructuredText now collect the location of coverage IDs in documents and source code.</li>
+          <li>Item ID locations enable IDE features including syntax highlighting, finding occurrences, jumping to definitions, and auto-completion.</li>
+          <li>Deprecated the ImportEventListener methods setId, addCoveredId, and addDependsOnId.</li>
+          <li>Collect source-code locations for specification item IDs.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+  <provides>
+    <binary>oft</binary>
+  </provides>
+</component>

@@ -1,0 +1,15 @@
+#!/bin/sh
+# oft - OpenFastTrace wrapper script
+
+set -e
+
+OFT_VERSION="$(dpkg-query -W -f='${Version}' openfasttrace)"
+readonly OFT_VERSION
+readonly OFT_JAR="/usr/share/java/openfasttrace-${OFT_VERSION%-*}.jar"
+
+# [impl->dsn~oft-wrapper-script~1]
+run_oft() {
+    exec java -jar "$OFT_JAR" "$@"
+}
+
+run_oft "$@"

@@ -1,0 +1,10 @@
+# [impl->dsn~package-icon-declaration~1]
+[Desktop Entry]
+Type=Application
+Name=OpenFastTrace
+Comment=Command-line interface for the OFT requirement tracing suite
+Exec=oft --help
+Icon=/usr/share/icons/hicolor/512x512/apps/org.itsallcode.openfasttrace.png
+Terminal=true
+Categories=Development;
+Keywords=tracing;requirements;agile;

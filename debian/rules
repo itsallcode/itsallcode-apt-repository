@@ -1,0 +1,42 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	mvn clean package -DskipTests
+	# Generate user guide in HTML and manpage formats
+	pandoc -s doc/user_guide.md -o user_guide.html
+	pandoc -s --metadata title="oft" --include-before-body=debian/oft.1.header doc/user_guide.md -t man -o oft.1
+	gzip -9n oft.1
+
+override_dh_auto_install:
+	# Install the static content (desktop file, icons, wrapper script, metainfo)
+	mkdir -p debian/openfasttrace
+	cp -r debian/static/* debian/openfasttrace/
+	# Install the JAR
+	mkdir -p debian/openfasttrace/usr/share/java
+	VERSION=$$(dpkg-parsechangelog -S Version | cut -d- -f1); \
+	cp product/target/openfasttrace-$$VERSION.jar debian/openfasttrace/usr/share/java/openfasttrace-$$VERSION.jar
+
+	# Generate PNG icons from the square SVG in various sizes and scales
+	SVG_SOURCE=debian/static/usr/share/icons/hicolor/scalable/apps/org.itsallcode.openfasttrace.svg; \
+	for size_spec in 16x16 16x16@2 20x20 22x22 22x22@2 24x24 24x24@2 30x30 32x32 32x32@2 36x36 36x36@2 42x42 48x48 48x48@2 50x50 64x64 64x64@2 72x72 72x72@2 96x96 96x96@2 100x100 128x128 128x128@2 150x150 160x160 192x192 192x192@2 256x256 256x256@2 512x512 512x512@2 1024x1024; do \
+		size=$${size_spec%@2}; \
+		pixel_size=$${size%x*}; \
+		case $$size_spec in \
+			*@2) pixel_size=$$((pixel_size * 2)) ;; \
+		esac; \
+		mkdir -p debian/openfasttrace/usr/share/icons/hicolor/$$size_spec/apps; \
+		convert -background none $$SVG_SOURCE -resize $${pixel_size}x$${pixel_size} debian/openfasttrace/usr/share/icons/hicolor/$$size_spec/apps/org.itsallcode.openfasttrace.png; \
+	done
+
+	# Install user guide (HTML and manpage)
+	mkdir -p debian/openfasttrace/usr/share/doc/openfasttrace
+	cp user_guide.html debian/openfasttrace/usr/share/doc/openfasttrace/user_guide.html
+	mkdir -p debian/openfasttrace/usr/share/man/man1
+	cp oft.1.gz debian/openfasttrace/usr/share/man/man1/oft.1.gz
+
+# GNOME Software reads this field from the binary package control archive.
+override_dh_gencontrol:
+	dh_gencontrol -- -DLicense=GPL-3.0-or-later

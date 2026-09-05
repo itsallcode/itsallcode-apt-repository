@@ -46,7 +46,7 @@ Rationale:
 
 End users of a debian-derived Linux distribution use this package type to install an application.
 
-Nees: req
+Needs: req
 
 ## High Level Requirements
 
@@ -56,6 +56,18 @@ Nees: req
 The packages are built with the package building tools provided by the Debian project.
 
 This project assumes that the build environment is Debian or a derived distribution.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#feat~debian-binary-package~1)
+
+Needs: dsn
+
+### Precondition Check
+`req~precondition-check~1`
+
+The package maintainer runs a script that verifies that the preconditions are fulfilled before starting the actual package build. If anything is missing on the build system, the script lists commands to execute to install the missing parts.
 
 Covers:
 
@@ -109,6 +121,87 @@ Covers:
 
 Needs: dsn
 
+### Binary Dependencies
+`req~binary-dependencies~1`
+
+The binary package for OFT declares a dependency on the OpenJDK headless package version 17 or later.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### OFT Wrapper Script
+`req~oft-wrapper-script~1`
+
+The OFT binary package contains a wrapper shell script called `oft` that wraps the CLI client in the OFT Java library.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Package AppStream Metadata
+`req~package-appstream-metadata~1`
+
+The binary package includes AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that complies with the AppStream standard. It includes:
+* Component type `desktop-application`.
+* Proper SPDX license identifiers (e.g., `GPL-3.0-or-later`).
+* A non-empty OARS 1.1 content rating.
+* Remote and local screenshot references.
+* Release information.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Package Icon Declaration
+`req~package-icon-declaration~1`
+
+The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself. It uses a standard icon theme directory (e.g., `/usr/share/icons/hicolor/scalable/apps/`) and an AppStream ID that matches the desktop file name. As the application brings its own icons, it declares the icon as `stock` in the metadata.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Scaled App Icons
+`req~scaled-app-icons~1`
+
+The binary package installs the app icons in various sizes and scales (including @2 for high-DPI displays). These icons are generated from the SVG icon during the build process and installed to the standard icon theme directory (`/usr/share/icons/hicolor`).
+
+Rationale:
+
+Linux distributions either use SVGs or PNG scaled to sizes from `16x16` all the way up to `1024x1024`. Additionally, hires variants can be found in directories named `16x16@2` and so on. 
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
+### Package Screenshots
+`req~package-screenshots~1`
+
+The binary package packs and declares the application screenshots from the upstream source in a way that software management applications (like GNOME Software or Discover) can display them. To ensure wide compatibility with AppStream standards while providing local assets, the screenshots are packed within the binary package and also referenced using stable raw GitHub URLs in the AppStream metadata.
+
+The image URLs are as follows: 
+
+1. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png
+2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png
+2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package~1)
+
+Needs: dsn
+
 ### Reproducible Build From Source Package
 `req~reproducible-build-from-source-package~1`
 
@@ -127,7 +220,8 @@ Needs: dsn
 The packages must include the following constant metadata:
 
 * Organization: itsallcode
-* Maintainers:
+* Debian Package Maintainer: Sebastian Bär <sebastian@baer.zone>
+* Upstream Authors:
   * Christoph Pirkl <christoph@chp1.net>
   * Sebastian Bär <sebastian@baer.zone>
 * Homepage URL: https://github.com/itsallcode/openfasttrace
@@ -140,6 +234,60 @@ Rationale:
 
 Debian packages require consistent metadata to ensure proper identification, licensing compliance, and user information.
 This metadata is used by package managers and documentation tools.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### HTML User Guide in Binary Package
+`req~user-guide-html~1`
+
+The build process takes the file `doc/user_guide.md`, turns it into HTML and packages it into the binary package.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Man Page User Guide in Binary Package
+`req~user-guide-manpage~1`
+
+The build process takes the file `doc/user_guide.md`, turns it into a manpage and packages it into the binary package.
+
+Covers:
+
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Debian Changelog
+`req~debian-changelog~1`
+
+The debian-style change log is derived from the changelog Markdown files found in the project under `doc/changes`. The debian changelog only gets appended to, never rewritten.
+
+Rationale:
+
+OFT already has a well-maintained changelog that serves as the source of truth for the package changelog. Appending ensures that reviewed changes are not modified. This is especially useful when the new entries are extracted automatically with a tool and need human review.
+
+Covers:
+
+* [`feat~debian-source-package~1`](#debian-source-package)
+* [`feat~debian-binary-package~1`](#debian-binary-package)
+
+Needs: dsn
+
+### Dedicated Build Directory
+`req~build-directory~1`
+
+The build process for the source and binary package uses a dedicated directory (e.g., `out/`) in the project root to store all generated artifacts.
+
+Rationale:
+
+A dedicated build directory keeps the project root clean and makes it easier to manage and identify generated files. This is a common practice in automated build environments.
 
 Covers:
 
