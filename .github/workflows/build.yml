@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build Debian source and binary packages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     concurrency:
@@ -42,11 +42,6 @@ jobs:
             pandoc \
             shellcheck \
             wget
-
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v5
-        with:
-          maven-version: 3.9.9
 
       - name: Configure Maven toolchain
         run: |
