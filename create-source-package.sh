@@ -52,7 +52,7 @@ download_screenshots() {
 
     echo "Downloading up-to-date screenshots from upstream main branch..."
     mkdir -p "$screenshots_dir"
-    
+
     # Remove old screenshots to ensure only the requested ones are included
     rm -f "$screenshots_dir"/*.png
 
@@ -77,25 +77,38 @@ extract_markdown_changes() {
     local -r change_file="$1"
     local -r temp_file="$2"
 
-    # Extract lines starting with * or - and clean them up
-    # Simple conversion: strip * or - bullets and use the content
-    grep -E '^\s*[\*\-]\s+' "$change_file" | sed -E 's/^\s*[\*\-]\s+//' > "$temp_file"
+    # 1. Extract Summary content (from ## Summary until the next ## or end of file)
+    sed -n '/## Summary/,/##/p' "$change_file" | grep -v '##' | sed -E 's/^[[:space:]]*([*\-][[:space:]]*)?//; s/\*\*//g; s/`//g; /^[[:space:]]*$/d' > "$temp_file"
+
+    # 2. Extract bullets from other sections but skip "Dependency Updates" and "Plugin Updates"
+    awk '/^## / {section=$0; next}
+         section !~ /Dependency Updates|Plugin Updates|Summary/ && /^[[:space:]]*[\*\-]/ {
+             sub(/^[[:space:]]*[\*\-][[:space:]]*/, "");
+             print $0
+         }' "$change_file" >> "$temp_file"
 }
 
 # [impl->dsn~changelog-extraction~1]
 apply_changelog_entries() {
     local -r version="$1"
     local -r entries_file="$2"
+    local -r debian_version="$version-1"
+
+    # Check if version already exists in changelog
+    if dpkg-parsechangelog -S Version | grep -q "^$debian_version$"; then
+        echo "Version $debian_version already exists in debian/changelog. Skipping."
+        return
+    fi
 
     if [[ ! -s "$entries_file" ]]; then
         echo "No changes found, using generic message."
-        dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
+        dch --newversion "$debian_version" --distribution unstable --force-distribution "New upstream release $version"
         return
     fi
 
     local -r first_line=$(head -n 1 "$entries_file")
-    dch --newversion "$version-1" --distribution unstable --force-distribution "$first_line"
-    
+    dch --newversion "$debian_version" --distribution unstable --force-distribution "$first_line"
+
     # Add subsequent lines if they exist
     tail -n +2 "$entries_file" | while read -r line; do
         if [[ -n "$line" ]]; then

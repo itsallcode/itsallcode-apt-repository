@@ -5,7 +5,7 @@
 
 set -e
 
-readonly DEFAULT_VERSION="4.2.2"
+readonly DEFAULT_VERSION="4.9.0"
 readonly BUILD_DIR="out"
 
 # [impl->dsn~integration-testing~1]

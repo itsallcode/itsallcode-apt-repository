@@ -1,0 +1,101 @@
+name: Build Debian package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Debian source and binary packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Install Debian build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes \
+            appstream \
+            curl \
+            debhelper \
+            devscripts \
+            dpkg-dev \
+            imagemagick \
+            maven \
+            openjdk-17-jdk \
+            pandoc \
+            shellcheck \
+            wget
+
+      - name: Read package version
+        run: echo "VERSION=$(dpkg-parsechangelog --show-field Version | sed 's/-[^-]*$//')" >> "$GITHUB_ENV"
+
+      - name: Create source package
+        run: ./create-source-package.sh "$VERSION"
+
+      - name: Create binary package
+        run: ./create-binary-package.sh "$VERSION"
+
+      - name: Smoke test installed package
+        run: |
+          sudo apt-get install --yes "./out/openfasttrace_${VERSION}-1_all.deb"
+          help_output="$(oft --help)"
+          printf '%s\n' "$help_output" | grep --extended-regexp --quiet \
+            '^OpenFastTrace [0-9]+\.[0-9]+\.[0-9]+$'
+
+      - name: Generate SHA-256 checksums
+        run: |
+          (
+            cd out
+            sha256sum \
+              "openfasttrace_${VERSION}.orig.tar.gz" \
+              "openfasttrace_${VERSION}-1.debian.tar.xz" \
+              "openfasttrace_${VERSION}-1.dsc" \
+              "openfasttrace_${VERSION}-1_all.deb"
+          ) > out/SHA256SUMS
+
+      - name: Upload source package
+        uses: actions/upload-artifact@v7
+        with:
+          name: openfasttrace-source-package
+          path: |
+            out/openfasttrace_*.orig.tar.gz
+            out/openfasttrace_*.debian.tar.xz
+            out/openfasttrace_*.dsc
+          if-no-files-found: error
+
+      - name: Upload binary package
+        uses: actions/upload-artifact@v7
+        with:
+          name: openfasttrace-binary-package
+          path: out/openfasttrace_*_all.deb
+          if-no-files-found: error
+
+      - name: Upload SHA-256 checksums
+        uses: actions/upload-artifact@v7
+        with:
+          name: openfasttrace-checksums
+          path: out/SHA256SUMS
+          if-no-files-found: error

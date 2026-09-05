@@ -162,7 +162,7 @@ Needs: dsn
 ### Package Icon Declaration
 `req~package-icon-declaration~1`
 
-The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself. It uses a standard icon theme directory (e.g., `/usr/share/icons/hicolor/scalable/apps/`) and an AppStream ID that matches the desktop file name. As the application brings its own icons, it declares the icon "themed" in the metadata.
+The binary package declares its icon in a way that software management applications (like GNOME Software or Discover) can display it for the package itself. It uses a standard icon theme directory (e.g., `/usr/share/icons/hicolor/scalable/apps/`) and an AppStream ID that matches the desktop file name. As the application brings its own icons, it declares the icon as `stock` in the metadata.
 
 Covers:
 

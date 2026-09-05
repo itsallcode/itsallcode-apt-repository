@@ -7,7 +7,7 @@ override_dh_auto_build:
 	mvn clean package -DskipTests
 	# Generate user guide in HTML and manpage formats
 	pandoc -s doc/user_guide.md -o user_guide.html
-	pandoc -s doc/user_guide.md -t man -o oft.1
+	pandoc -s --metadata title="oft" --include-before-body=debian/oft.1.header doc/user_guide.md -t man -o oft.1
 	gzip -9n oft.1
 
 override_dh_auto_install:
@@ -17,7 +17,7 @@ override_dh_auto_install:
 	# Install the JAR
 	mkdir -p debian/openfasttrace/usr/share/java
 	VERSION=$$(dpkg-parsechangelog -S Version | cut -d- -f1); \
-	cp product/target/openfasttrace-$$VERSION.jar debian/openfasttrace/usr/share/java/openfasttrace.jar
+	cp product/target/openfasttrace-$$VERSION.jar debian/openfasttrace/usr/share/java/openfasttrace-$$VERSION.jar
 
 	# Generate PNG icons from the square SVG in various sizes and scales
 	SVG_SOURCE=debian/static/usr/share/icons/hicolor/scalable/apps/org.itsallcode.openfasttrace.svg; \
