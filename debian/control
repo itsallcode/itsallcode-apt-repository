@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Sebastian Bär <sebastian@baer.zone>
 # [impl->dsn~build-tools~1]
-Build-Depends: debhelper-compat (= 13), openjdk-17-jdk, maven, pandoc, appstream
+Build-Depends: debhelper-compat (= 13), openjdk-17-jdk-headless, maven, pandoc, appstream
 Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Homepage: https://github.com/itsallcode/openfasttrace
