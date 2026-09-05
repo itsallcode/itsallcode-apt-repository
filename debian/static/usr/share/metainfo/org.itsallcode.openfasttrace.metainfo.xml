@@ -38,7 +38,16 @@
   </developer>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="4.9.0" date="2026-08-07" />
+    <release version="4.9.0" date="2026-09-05" type="stable">
+      <description>
+        <ul>
+          <li>Importers for long coverage tags, Markdown, and reStructuredText now collect the location of coverage IDs in documents and source code.</li>
+          <li>Item ID locations enable IDE features including syntax highlighting, finding occurrences, jumping to definitions, and auto-completion.</li>
+          <li>Deprecated the ImportEventListener methods setId, addCoveredId, and addDependsOnId.</li>
+          <li>Collect source-code locations for specification item IDs.</li>
+        </ul>
+      </description>
+    </release>
   </releases>
   <provides>
     <binary>oft</binary>

@@ -36,3 +36,7 @@ override_dh_auto_install:
 	cp user_guide.html debian/openfasttrace/usr/share/doc/openfasttrace/user_guide.html
 	mkdir -p debian/openfasttrace/usr/share/man/man1
 	cp oft.1.gz debian/openfasttrace/usr/share/man/man1/oft.1.gz
+
+# GNOME Software reads this field from the binary package control archive.
+override_dh_gencontrol:
+	dh_gencontrol -- -DLicense=GPL-3.0-or-later

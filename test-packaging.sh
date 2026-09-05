@@ -43,6 +43,12 @@ verify_output_files() {
     fi
     echo "  [ OK ] Found $deb_file"
 
+    if [[ "$(dpkg-deb -f "$deb_file" License)" != "GPL-3.0-or-later" ]]; then
+        echo "Error: Package license metadata is missing or incorrect."
+        return 1
+    fi
+    echo "  [ OK ] Package license metadata is present."
+
     echo "Verifying that user guide was generated and included in the build directory..."
     local -r build_subdir="$BUILD_DIR/openfasttrace-$version"
     if [[ ! -f "$build_subdir/user_guide.html" ]]; then
@@ -91,6 +97,11 @@ validate_appstream() {
 
     if ! appstreamcli validate --no-net --explain "$metainfo_path"; then
         echo "Warning: AppStream validation reported issues, but continuing..."
+    fi
+    if ! awk "/<release version=\"$version\"/,/<\\/release>/" "$metainfo_path" |
+        grep --quiet '<description>'; then
+        echo "Error: AppStream release metadata has no changelog description."
+        return 1
     fi
     echo "  [ OK ] AppStream metadata is valid."
 }
