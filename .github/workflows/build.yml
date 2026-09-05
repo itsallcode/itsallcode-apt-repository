@@ -38,10 +38,29 @@ jobs:
             dpkg-dev \
             imagemagick \
             maven \
-            openjdk-17-jdk \
+            openjdk-17-jdk-headless \
             pandoc \
             shellcheck \
             wget
+
+      - name: Configure Maven toolchain
+        run: |
+          jdk_home="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
+          mkdir --parents "$HOME/.m2"
+          cat > "$HOME/.m2/toolchains.xml" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <toolchains>
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>17</version>
+              </provides>
+              <configuration>
+                <jdkHome>$jdk_home</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
 
       - name: Read package version
         run: echo "VERSION=$(dpkg-parsechangelog --show-field Version | sed 's/-[^-]*$//')" >> "$GITHUB_ENV"
