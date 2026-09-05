@@ -2,7 +2,7 @@
 [Desktop Entry]
 Type=Application
 Name=OpenFastTrace
-Comment=Command-line requirement tracing suite for agile projects
+Comment=Command-line interface for the OFT requirement tracing suite
 Exec=oft --help
 Icon=/usr/share/icons/hicolor/512x512/apps/org.itsallcode.openfasttrace.png
 Terminal=true
