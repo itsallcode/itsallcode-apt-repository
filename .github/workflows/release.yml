@@ -55,10 +55,16 @@ jobs:
             devscripts \
             dpkg-dev \
             imagemagick \
+            maven \
             openjdk-17-jdk \
             pandoc \
             shellcheck \
             wget
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.9
 
       - name: Create source package
         run: ./create-source-package.sh "$VERSION"

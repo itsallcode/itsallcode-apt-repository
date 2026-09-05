@@ -37,10 +37,16 @@ jobs:
             devscripts \
             dpkg-dev \
             imagemagick \
+            maven \
             openjdk-17-jdk-headless \
             pandoc \
             shellcheck \
             wget
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.9
 
       - name: Configure Maven toolchain
         run: |
