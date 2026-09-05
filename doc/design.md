@@ -142,7 +142,7 @@ Needs: impl,itest
 `dsn~package-icon-declaration~1`
 
 The package declares its icon using:
-1.  A standard Desktop Entry file (`/usr/share/applications/org.itsallcode.openfasttrace.desktop`) that specifies `Icon=org.itsallcode.openfasttrace` and `Terminal=true`.
+1.  A standard Desktop Entry file (`/usr/share/applications/org.itsallcode.openfasttrace.desktop`) that specifies the generated 512×512 PNG icon, `Terminal=true`, and runs `oft --help` so the launcher displays the command-line reference. Using the PNG avoids SVG-gradient rendering differences in desktop shells.
 2.  AppStream metadata (`/usr/share/metainfo/org.itsallcode.openfasttrace.metainfo.xml`) that references the desktop file and identifies the application with `<launchable type="desktop-id">org.itsallcode.openfasttrace.desktop</launchable>` and `<icon type="stock">org.itsallcode.openfasttrace</icon>`.
 
 Covers:

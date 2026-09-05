@@ -103,6 +103,20 @@ validate_appstream() {
         echo "Error: AppStream release metadata has no changelog description."
         return 1
     fi
+    if ! grep --quiet '<pkgname>openfasttrace</pkgname>' "$metainfo_path"; then
+        echo "Error: AppStream metadata does not identify the Debian package."
+        return 1
+    fi
+    if ! grep --quiet '^Exec=oft --help$' \
+        "$build_subdir/debian/openfasttrace/usr/share/applications/org.itsallcode.openfasttrace.desktop"; then
+        echo "Error: Desktop launcher does not display the OFT help text."
+        return 1
+    fi
+    if ! grep --quiet '^Icon=/usr/share/icons/hicolor/512x512/apps/org.itsallcode.openfasttrace.png$' \
+        "$build_subdir/debian/openfasttrace/usr/share/applications/org.itsallcode.openfasttrace.desktop"; then
+        echo "Error: Desktop launcher does not use the generated PNG icon."
+        return 1
+    fi
     echo "  [ OK ] AppStream metadata is valid."
 }
 
