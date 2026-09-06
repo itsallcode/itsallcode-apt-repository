@@ -25,7 +25,6 @@ jobs:
       APT_REPOSITORY_SIGNING_KEY: ${{ secrets.APT_REPOSITORY_SIGNING_KEY }}
       APT_REPOSITORY_SIGNING_PASSPHRASE: ${{ secrets.APT_REPOSITORY_SIGNING_PASSPHRASE }}
       EXPECTED_SIGNING_FINGERPRINT: ${{ secrets.APT_REPOSITORY_SIGNING_FINGERPRINT }}
-      GNUPGHOME: ${{ runner.temp }}/gnupg
 
     steps:
       - name: Checkout
@@ -43,6 +42,8 @@ jobs:
 
       - name: Import and verify repository signing key
         run: |
+          export GNUPGHOME="$RUNNER_TEMP/gnupg"
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
           if [[ -z "$EXPECTED_SIGNING_FINGERPRINT" ]]; then
             echo "APT_REPOSITORY_SIGNING_FINGERPRINT Actions secret is required." >&2
             exit 1
