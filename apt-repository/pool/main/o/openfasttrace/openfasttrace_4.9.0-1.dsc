@@ -3,7 +3,7 @@ Source: openfasttrace
 Binary: openfasttrace
 Architecture: all
 Version: 4.9.0-1
-Maintainer: Sebastian Bär <sebastian@baer.zone>
+Maintainer: itsallcode.org <maintainers@itsallcode.org>
 Homepage: https://github.com/itsallcode/openfasttrace
 Standards-Version: 4.6.2
 Vcs-Browser: https://github.com/itsallcode/openfasttrace-debian-package

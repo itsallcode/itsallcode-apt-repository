@@ -225,7 +225,7 @@ The packages must include the following constant metadata:
   * Christoph Pirkl <christoph@chp1.net>
   * Sebastian Bär <sebastian@baer.zone>
 * Homepage URL: https://github.com/itsallcode/openfasttrace
-* Source URL: https://github.com/itsallcode/openfasttrace-debian-package
+* Source URL: https://github.com/itsallcode/itsallcode-apt-repository
 * License: GPL-3.0
 * Short Description: Requirement tracing suite for agile projects
 * Long Description: OpenFastTrace (OFT) is a requirement tracing suite. It helps developers and project managers track requirements throughout the software development lifecycle.

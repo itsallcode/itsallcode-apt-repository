@@ -2,11 +2,11 @@
 
 This repository builds Debian packages for [OpenFastTrace](https://github.com/itsallcode/openfasttrace) (OFT), a requirement tracing suite. OFT keeps track of whether you implemented everything planned in your specifications and identifies obsolete parts of a product.
 
-[![Build Debian package](https://github.com/itsallcode/openfasttrace-debian-package/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/openfasttrace-debian-package/actions/workflows/build.yml)
+[![Build Debian package](https://github.com/itsallcode/itsallcode-apt-repository/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/itsallcode-apt-repository/actions/workflows/build.yml)
 
 ## Getting the Package
 
-Pre-built source and binary packages are available from the [GitHub releases](https://github.com/itsallcode/openfasttrace-debian-package/releases). Install the binary package with its Java runtime dependency:
+Pre-built source and binary packages are available from the [GitHub releases](https://github.com/itsallcode/itsallcode-apt-repository/releases). Install the binary package with its Java runtime dependency:
 
 ```sh
 sudo apt install ./openfasttrace_<version>-<package-revision>_all.deb

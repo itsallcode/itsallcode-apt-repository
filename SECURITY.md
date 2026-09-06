@@ -8,7 +8,7 @@ We provide security updates for the latest package release. Security fixes to Op
 
 ## Reporting a Vulnerability
 
-If you discover a potential security issue in this packaging repository or its published packages, please report it privately via [GitHub Security Advisories](https://github.com/itsallcode/openfasttrace-debian-package/security/advisories/new). For a vulnerability in OpenFastTrace itself, use the [upstream security reporting channel](https://github.com/itsallcode/openfasttrace/security/advisories/new).
+If you discover a potential security issue in this packaging repository or its published packages, please report it privately via [GitHub Security Advisories](https://github.com/itsallcode/itsallcode-apt-repository/security/advisories/new). For a vulnerability in OpenFastTrace itself, use the [upstream security reporting channel](https://github.com/itsallcode/openfasttrace/security/advisories/new).
 
 We follow coordinated disclosure and aim to:
 
