@@ -25,6 +25,4 @@ It follows the Debian archive layout:
   source tarball, and Debian tarball here.
 * `dists/stable/main/binary-all/` contains the generated binary package index for the architecture-independent OpenFastTrace package.
 * `dists/stable/main/source/` contains the generated source package index.
-* `dists/stable/` will contain the generated and signed `Release`,`InRelease`, and `Release.gpg` files.
-
-The release workflow generates repository indexes and signatures from the committed package files. It also publishes the archive public key and its fingerprint at this directory's root. Merging a pull request that changes this directory deploys the resulting repository directly to GitHub Pages.
+* `dists/stable/` contains the generated and signed `Release`,`InRelease`, and `Release.gpg` files.
