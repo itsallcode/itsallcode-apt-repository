@@ -9,7 +9,7 @@ This repository builds Debian packages for [OpenFastTrace](https://github.com/it
 Pre-built source and binary packages are available from the [GitHub releases](https://github.com/itsallcode/openfasttrace-debian-package/releases). Install the binary package with its Java runtime dependency:
 
 ```sh
-sudo apt install ./openfasttrace_<version>-1_all.deb
+sudo apt install ./openfasttrace_<version>-<package-revision>_all.deb
 ```
 
 Run OpenFastTrace with:
@@ -26,8 +26,8 @@ On Debian or a derived distribution, install the tools listed by the preconditio
 
 ```sh
 ./check-preconditions.sh
-./create-source-package.sh <version>
-./create-binary-package.sh <version>
+./create-source-package.sh <version> [package-revision]
+./create-binary-package.sh <version> [package-revision]
 ```
 
 The resulting artifacts are placed in `out/`. The scripts download the specified OpenFastTrace source release, incorporate this repository's `debian/` packaging metadata, and build the package.

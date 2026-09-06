@@ -14,10 +14,11 @@ readonly BUILD_DIR="out"
 # [itest->dsn~user-guide-manpage~1]
 verify_output_files() {
     local -r version="$1"
+    local -r package_revision="$2"
     local -r expected_files=(
         "$BUILD_DIR/openfasttrace_$version.orig.tar.gz"
-        "$BUILD_DIR/openfasttrace_$version-1.dsc"
-        "$BUILD_DIR/openfasttrace_$version-1.debian.tar.xz"
+        "$BUILD_DIR/openfasttrace_$version-$package_revision.dsc"
+        "$BUILD_DIR/openfasttrace_$version-$package_revision.debian.tar.xz"
     )
 
     echo "Verifying output files..."
@@ -30,7 +31,7 @@ verify_output_files() {
     done
 
     local deb_file=""
-    for f in "$BUILD_DIR"/openfasttrace_"$version"-1_*.deb; do
+    for f in "$BUILD_DIR"/openfasttrace_"$version"-"$package_revision"_*.deb; do
         if [[ -e "$f" ]]; then
             deb_file="$f"
             break
@@ -141,19 +142,20 @@ validate_appstream() {
 # [itest->dsn~finding-free-shellcheck~1]
 main() {
     local -r version="${1:-$DEFAULT_VERSION}"
-    echo "Starting integration test for version: $version"
+    local -r package_revision="${2:-1}"
+    echo "Starting integration test for version: $version-$package_revision"
 
     echo "Step 1: Checking preconditions..."
     ./check-preconditions.sh
 
     echo "Step 2: Creating source package..."
-    ./create-source-package.sh "$version"
+    ./create-source-package.sh "$version" "$package_revision"
 
     echo "Step 3: Creating binary package..."
-    ./create-binary-package.sh "$version"
+    ./create-binary-package.sh "$version" "$package_revision"
 
     echo "Step 4: Verifying output files..."
-    verify_output_files "$version"
+    verify_output_files "$version" "$package_revision"
 
     echo "Step 5: Running shellcheck..."
     run_shellcheck
@@ -162,7 +164,7 @@ main() {
     validate_appstream "$version"
 
     echo ""
-    echo "Integration test for OpenFastTrace version $version COMPLETED SUCCESSFULLY."
+    echo "Integration test for OpenFastTrace version $version-$package_revision COMPLETED SUCCESSFULLY."
 }
 
 main "$@"
