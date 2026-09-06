@@ -1,0 +1,115 @@
+name: Publish APT repository
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - apt-repository/**
+      - .github/workflows/publish-apt-repository.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build signed APT repository
+    runs-on: ubuntu-26.04
+    env:
+      APT_REPOSITORY_SIGNING_KEY: ${{ secrets.APT_REPOSITORY_SIGNING_KEY }}
+      APT_REPOSITORY_SIGNING_PASSPHRASE: ${{ secrets.APT_REPOSITORY_SIGNING_PASSPHRASE }}
+      EXPECTED_SIGNING_FINGERPRINT: ${{ secrets.APT_REPOSITORY_SIGNING_FINGERPRINT }}
+      GNUPGHOME: ${{ runner.temp }}/gnupg
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Install repository build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes apt-utils gnupg
+
+      - name: Import and verify repository signing key
+        run: |
+          if [[ -z "$EXPECTED_SIGNING_FINGERPRINT" ]]; then
+            echo "APT_REPOSITORY_SIGNING_FINGERPRINT Actions secret is required." >&2
+            exit 1
+          fi
+          mkdir --mode=0700 "$GNUPGHOME"
+          printf '%s' "$APT_REPOSITORY_SIGNING_KEY" | gpg --batch --import
+          signing_fingerprint="$(gpg --batch --with-colons --list-secret-keys \
+            | awk -F: '$1 == "fpr" { print $10; exit }')"
+          if [[ "$signing_fingerprint" != "$EXPECTED_SIGNING_FINGERPRINT" ]]; then
+            echo "The imported signing key does not match APT_REPOSITORY_SIGNING_FINGERPRINT." >&2
+            exit 1
+          fi
+          printf '%s\n' "$signing_fingerprint" > "$RUNNER_TEMP/signing-fingerprint"
+
+      - name: Generate and sign repository metadata
+        run: |
+          site_dir="$RUNNER_TEMP/site"
+          distribution_dir="$site_dir/dists/stable"
+          signing_fingerprint="$(<"$RUNNER_TEMP/signing-fingerprint")"
+          mkdir --parents "$site_dir"
+          cp --archive apt-repository/. "$site_dir/"
+          find "$site_dir" -type f -name .gitkeep -delete
+          mkdir --parents "$distribution_dir/main/binary-all" "$distribution_dir/main/source"
+
+          (
+            cd "$site_dir"
+            apt-ftparchive packages pool/main > dists/stable/main/binary-all/Packages
+            gzip --keep --force dists/stable/main/binary-all/Packages
+            apt-ftparchive sources pool/main > dists/stable/main/source/Sources
+            gzip --keep --force dists/stable/main/source/Sources
+
+            apt-ftparchive \
+              -o APT::FTPArchive::Release::Origin="itsallcode" \
+              -o APT::FTPArchive::Release::Label="OpenFastTrace" \
+              -o APT::FTPArchive::Release::Suite="stable" \
+              -o APT::FTPArchive::Release::Codename="stable" \
+              -o APT::FTPArchive::Release::Architectures="all" \
+              -o APT::FTPArchive::Release::Components="main" \
+              -o APT::FTPArchive::Release::Description="OpenFastTrace Debian packages" \
+              release dists/stable > dists/stable/Release
+          )
+
+          gpg --batch --yes --local-user "$signing_fingerprint" \
+            --pinentry-mode loopback --passphrase "$APT_REPOSITORY_SIGNING_PASSPHRASE" \
+            --armor --detach-sign --output "$distribution_dir/Release.gpg" "$distribution_dir/Release"
+          gpg --batch --yes --local-user "$signing_fingerprint" \
+            --pinentry-mode loopback --passphrase "$APT_REPOSITORY_SIGNING_PASSPHRASE" \
+            --clearsign --output "$distribution_dir/InRelease" "$distribution_dir/Release"
+          gpg --batch --armor --export "$signing_fingerprint" \
+            > "$site_dir/itsallcode-archive-keyring.asc"
+          printf '%s\n' "$signing_fingerprint" \
+            > "$site_dir/itsallcode-archive-keyring.fingerprint"
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ runner.temp }}/site
+
+  deploy:
+    name: Deploy APT repository
+    needs: build
+    runs-on: ubuntu-26.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

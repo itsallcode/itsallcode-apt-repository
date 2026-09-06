@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>itsallcode.org APT Repository</title>
+  </head>
+  <body>
+    <h1>itsallcode.org APT Repository</h1>
+    <p>
+      This repository provides itsallcode.org's Debian packages for the <code>stable</code> suite and <code>main</code> component. OpenFastTrace is the most prominent example.
+    </p>
+
+    <h2>Installing Packages From This Repository</h2>
+    <ol>
+      <li>
+        <p>Install the archive key in a dedicated APT keyring.</p>
+        <pre>sudo install --directory --mode=0755 /etc/apt/keyrings
+curl --fail --silent --show-error --location \
+  https://apt.itsallcode.org/openfasttrace/itsallcode-archive-keyring.asc \
+  | sudo gpg --dearmor --yes --output /etc/apt/keyrings/itsallcode-archive-keyring.gpg</pre>
+      </li>
+      <li>
+        <p>Add the signed repository source.</p>
+        <pre>echo 'deb [signed-by=/etc/apt/keyrings/itsallcode-archive-keyring.gpg] https://apt.itsallcode.org/openfasttrace stable main' \
+  | sudo tee /etc/apt/sources.list.d/openfasttrace.list &gt; /dev/null</pre>
+      </li>
+      <li>
+        <p>Update APT and install the package.</p>
+        <pre>sudo apt update</pre>
+      </li>
+      <li>
+        <p>Install a package, for example <code>openfasttrace</code>.</p>
+        <pre>sudo apt install openfasttrace</pre>
+      </li>
+    </ol>
+
+    <p>
+      Before trusting the key, verify its <a href="itsallcode-archive-keyring.fingerprint">published fingerprint</a>. The <a href="itsallcode-archive-keyring.asc">ASCII-armored public key</a> is also available directly.
+    </p>
+  </body>
+</html>

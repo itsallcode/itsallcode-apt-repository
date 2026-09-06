@@ -29,6 +29,7 @@ jobs:
       VERSION: ${{ inputs.version }}
       PACKAGE_REVISION: ${{ inputs.package_revision }}
       PACKAGE_VERSION: ${{ inputs.version }}-${{ inputs.package_revision }}
+      PACKAGE_POOL_DIR: apt-repository/pool/main/o/openfasttrace
 
     steps:
       - name: Checkout
@@ -44,58 +45,64 @@ jobs:
           script: |
             core.setFailed('Not running on main branch. Start this workflow from main.')
 
-      - name: Install Debian build dependencies
+      - name: Validate committed package artifacts
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes \
-            appstream \
-            build-essential \
-            curl \
-            debhelper \
-            devscripts \
-            dpkg-dev \
-            imagemagick \
-            maven \
-            openjdk-17-jdk-headless \
-            pandoc \
-            shellcheck \
-            wget
+          readonly orig_tarball="openfasttrace_${VERSION}.orig.tar.gz"
+          readonly debian_tarball="openfasttrace_${PACKAGE_VERSION}.debian.tar.xz"
+          readonly dsc_file="openfasttrace_${PACKAGE_VERSION}.dsc"
+          readonly binary_package="openfasttrace_${PACKAGE_VERSION}_all.deb"
+          readonly checksum_file="openfasttrace_${PACKAGE_VERSION}.SHA256SUMS"
+          readonly artifacts=(
+            "$orig_tarball"
+            "$debian_tarball"
+            "$dsc_file"
+            "$binary_package"
+            "$checksum_file"
+          )
 
-      - name: Configure Maven toolchain
-        run: |
-          jdk_home="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
-          mkdir --parents "$HOME/.m2"
-          cat > "$HOME/.m2/toolchains.xml" <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <toolchains>
-            <toolchain>
-              <type>jdk</type>
-              <provides>
-                <version>17</version>
-              </provides>
-              <configuration>
-                <jdkHome>$jdk_home</jdkHome>
-              </configuration>
-            </toolchain>
-          </toolchains>
-          EOF
+          if [[ ! -d "$PACKAGE_POOL_DIR" ]]; then
+            echo "Error: The APT package pool is missing: $PACKAGE_POOL_DIR" >&2
+            echo "Mitigation: merge the package pull request that adds version $PACKAGE_VERSION before releasing it." >&2
+            exit 1
+          fi
 
-      - name: Create source package
-        run: ./create-source-package.sh "$VERSION" "$PACKAGE_REVISION"
-
-      - name: Create binary package
-        run: ./create-binary-package.sh "$VERSION" "$PACKAGE_REVISION"
-
-      - name: Generate SHA-256 checksums
-        run: |
+          missing_artifacts=0
+          for artifact in "${artifacts[@]}"; do
+            if [[ ! -f "$PACKAGE_POOL_DIR/$artifact" ]]; then
+              echo "Error: Missing committed package artifact: $PACKAGE_POOL_DIR/$artifact" >&2
+              missing_artifacts=1
+            fi
+          done
+          if [[ "$missing_artifacts" -ne 0 ]]; then
+            echo "Mitigation: create and stage the package, then commit and merge the staged files:" >&2
+            echo "  ./create-source-package.sh $VERSION $PACKAGE_REVISION" >&2
+            echo "  ./create-binary-package.sh $VERSION $PACKAGE_REVISION" >&2
+            echo "  ./stage-apt-package.sh $VERSION $PACKAGE_REVISION" >&2
+            exit 1
+          fi
           (
-            cd out
-            sha256sum \
-              "openfasttrace_${VERSION}.orig.tar.gz" \
-              "openfasttrace_${PACKAGE_VERSION}.debian.tar.xz" \
-              "openfasttrace_${PACKAGE_VERSION}.dsc" \
-              "openfasttrace_${PACKAGE_VERSION}_all.deb"
-          ) > out/SHA256SUMS
+            cd "$PACKAGE_POOL_DIR"
+            if ! sha256sum --check "$checksum_file"; then
+              echo "Error: The checksum manifest for $PACKAGE_VERSION does not match the committed package artifacts." >&2
+              echo "Mitigation: regenerate the staged package with ./stage-apt-package.sh $VERSION $PACKAGE_REVISION and commit the updated files." >&2
+              exit 1
+            fi
+          )
+          if [[ "$(dpkg-deb --field "$PACKAGE_POOL_DIR/$binary_package" Package)" != "openfasttrace" ]]; then
+            echo "Error: $binary_package is not an openfasttrace package." >&2
+            echo "Mitigation: stage the package produced by ./create-binary-package.sh $VERSION $PACKAGE_REVISION." >&2
+            exit 1
+          fi
+          if [[ "$(dpkg-deb --field "$PACKAGE_POOL_DIR/$binary_package" Version)" != "$PACKAGE_VERSION" ]]; then
+            echo "Error: $binary_package does not declare Debian version $PACKAGE_VERSION." >&2
+            echo "Mitigation: stage matching source and binary artifacts for version $PACKAGE_VERSION." >&2
+            exit 1
+          fi
+          if [[ "$(dpkg-deb --field "$PACKAGE_POOL_DIR/$binary_package" Architecture)" != "all" ]]; then
+            echo "Error: $binary_package is not architecture-independent." >&2
+            echo "Mitigation: stage the OpenFastTrace all-architecture package for version $PACKAGE_VERSION." >&2
+            exit 1
+          fi
 
       - name: Create GitHub release
         run: |
@@ -103,10 +110,10 @@ jobs:
             --target main \
             --title "$PACKAGE_VERSION: OpenFastTrace Debian Package" \
             --generate-notes \
-            "out/openfasttrace_${VERSION}.orig.tar.gz" \
-            "out/openfasttrace_${PACKAGE_VERSION}.debian.tar.xz" \
-            "out/openfasttrace_${PACKAGE_VERSION}.dsc" \
-            "out/openfasttrace_${PACKAGE_VERSION}_all.deb" \
-            out/SHA256SUMS
+            "$PACKAGE_POOL_DIR/openfasttrace_${VERSION}.orig.tar.gz" \
+            "$PACKAGE_POOL_DIR/openfasttrace_${PACKAGE_VERSION}.debian.tar.xz" \
+            "$PACKAGE_POOL_DIR/openfasttrace_${PACKAGE_VERSION}.dsc" \
+            "$PACKAGE_POOL_DIR/openfasttrace_${PACKAGE_VERSION}_all.deb" \
+            "$PACKAGE_POOL_DIR/openfasttrace_${PACKAGE_VERSION}.SHA256SUMS"
         env:
           GH_TOKEN: ${{ github.token }}

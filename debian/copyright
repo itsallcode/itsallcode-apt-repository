@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: openfasttrace
-Upstream-Contact: Christoph Pirkl <christoph@chp1.net>, Sebastian Bär <sebastian@baer.zone>
+Upstream-Contact: Christoph Pirkl <christoph@chp1.net>, itsallcode.org <maintainers@itsallcode.org>
 Source: https://github.com/itsallcode/openfasttrace
 
 Files: *
-Copyright: 2016-2026 itsallcode, Christoph Pirkl <christoph@chp1.net>, Sebastian Bär <sebastian@baer.zone>
+Copyright: 2016-2026 itsallcode, Christoph Pirkl <christoph@chp1.net>, itsallcode.org <maintainers@itsallcode.org>
 License: GPL-3.0
 
 License: GPL-3.0

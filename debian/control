@@ -1,14 +1,14 @@
 Source: openfasttrace
 Section: misc
 Priority: optional
-Maintainer: Sebastian Bär <sebastian@baer.zone>
+Maintainer: itsallcode.org <maintainers@itsallcode.org>
 # [impl->dsn~build-tools~1]
 Build-Depends: debhelper-compat (= 13), openjdk-17-jdk-headless, maven, pandoc, appstream
 Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Homepage: https://github.com/itsallcode/openfasttrace
-Vcs-Browser: https://github.com/itsallcode/openfasttrace-debian-package
-Vcs-Git: https://github.com/itsallcode/openfasttrace-debian-package.git
+Vcs-Browser: https://github.com/itsallcode/itsallcode-apt-repository
+Vcs-Git: https://github.com/itsallcode/itsallcode-apt-repository.git
 
 Package: openfasttrace
 Architecture: all
