@@ -6,8 +6,8 @@
 set -e
 
 readonly OFT_REPO_URL="https://github.com/itsallcode/openfasttrace"
-readonly DEBFULLNAME="Sebastian Bär"
-readonly DEBEMAIL="sebastian@baer.zone"
+readonly DEBFULLNAME="itsallcode.org"
+readonly DEBEMAIL="maintainers@itsallcode.org"
 readonly BUILD_DIR="out"
 export DEBFULLNAME DEBEMAIL
 

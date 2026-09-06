@@ -11,17 +11,17 @@ openfasttrace (4.9.0-1) unstable; urgency=medium
     addCoveredId, and addDependsOnId.
   * #570: Collect source code location of specification item IDs
 
- -- Sebastian Bär <sebastian@baer.zone>  Sat, 05 Sep 2026 17:34:13 +0200
+ -- itsallcode.org <maintainers@itsallcode.org>  Sat, 05 Sep 2026 17:34:13 +0200
 
 openfasttrace (4.2.2-1) unstable; urgency=medium
 
   * In this release we added support for SystemVerilog files.
   * #471: Add tag importer support for SystemVerilog files
 
- -- Sebastian Bär <sebastian@baer.zone>  Fri, 03 Apr 2026 16:35:26 +0200
+ -- itsallcode.org <maintainers@itsallcode.org>  Fri, 03 Apr 2026 16:35:26 +0200
 
 openfasttrace (0.0.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- Sebastian Bär <sebastian@ikarus.olymp>  Fri, 03 Apr 2026 16:27:42 +0200
+ -- itsallcode.org <sebastian@ikarus.olymp>  Fri, 03 Apr 2026 16:27:42 +0200
