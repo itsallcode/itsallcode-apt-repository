@@ -30,6 +30,14 @@ validate_version() {
     fi
 }
 
+validate_package_revision() {
+    local -r package_revision="$1"
+    if [[ ! "$package_revision" =~ ^[1-9][0-9]*$ ]]; then
+        echo "Error: Invalid Debian package revision '$package_revision'. Expected a positive integer." >&2
+        return 1
+    fi
+}
+
 # [impl->dsn~source-fetching~1]
 download_source() {
     local -r version="$1"
@@ -91,8 +99,9 @@ extract_markdown_changes() {
 # [impl->dsn~changelog-extraction~1]
 apply_changelog_entries() {
     local -r version="$1"
-    local -r entries_file="$2"
-    local -r debian_version="$version-1"
+    local -r package_revision="$2"
+    local -r entries_file="$3"
+    local -r debian_version="$version-$package_revision"
 
     # Check if version already exists in changelog
     if dpkg-parsechangelog -S Version | grep -q "^$debian_version$"; then
@@ -120,6 +129,7 @@ apply_changelog_entries() {
 # [impl->dsn~changelog-extraction~1]
 update_changelog() {
     local -r version="$1"
+    local -r package_revision="$2"
     local -r source_dir="$BUILD_DIR/openfasttrace-$version"
     local -r changes_dir="$source_dir/doc/changes"
     local -r change_file="$changes_dir/changes_$version.md"
@@ -128,19 +138,19 @@ update_changelog() {
 
     if [[ ! -d "$changes_dir" ]]; then
         echo "Warning: No changes directory found in source." >&2
-        dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
+        dch --newversion "$version-$package_revision" --distribution unstable --force-distribution "New upstream release $version"
         return
     fi
 
     if [[ ! -f "$change_file" ]]; then
         echo "Warning: No change file found for version $version at $change_file" >&2
-        dch --newversion "$version-1" --distribution unstable --force-distribution "New upstream release $version"
+        dch --newversion "$version-$package_revision" --distribution unstable --force-distribution "New upstream release $version"
         return
     fi
 
     local -r temp_changelog_msg=$(mktemp)
     extract_markdown_changes "$change_file" "$temp_changelog_msg"
-    apply_changelog_entries "$version" "$temp_changelog_msg"
+    apply_changelog_entries "$version" "$package_revision" "$temp_changelog_msg"
     rm "$temp_changelog_msg"
 }
 
@@ -170,24 +180,26 @@ cleanup_extraction() {
 
 # [impl->dsn~build-orchestration-scripts~1]
 main() {
-    if [[ $# -ne 1 ]]; then
-        echo "Usage: $0 <version>" >&2
+    if [[ $# -lt 1 || $# -gt 2 ]]; then
+        echo "Usage: $0 <version> [package-revision]" >&2
         exit 1
     fi
 
     local -r version="$1"
+    local -r package_revision="${2:-1}"
     validate_version "$version"
+    validate_package_revision "$package_revision"
     
     verify_preconditions
     ensure_build_dir
     download_source "$version"
     download_screenshots
     extract_source "$BUILD_DIR/openfasttrace-$version.tar.gz" "$version"
-    update_changelog "$version"
+    update_changelog "$version" "$package_revision"
     prepare_debian_source "$version"
     cleanup_extraction "$version"
 
-    echo "Source package for version $version created successfully in $BUILD_DIR."
+    echo "Source package for version $version-$package_revision created successfully in $BUILD_DIR."
 }
 
 main "$@"

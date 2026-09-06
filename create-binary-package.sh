@@ -26,16 +26,25 @@ validate_version() {
     fi
 }
 
+validate_package_revision() {
+    local -r package_revision="$1"
+    if [[ ! "$package_revision" =~ ^[1-9][0-9]*$ ]]; then
+        echo "Error: Invalid Debian package revision '$package_revision'. Expected a positive integer." >&2
+        return 1
+    fi
+}
+
 # [impl->dsn~build-orchestration-scripts~1]
 check_source_package_exists() {
     local -r version="$1"
-    local -r dsc_file="$BUILD_DIR/openfasttrace_$version-1.dsc"
+    local -r package_revision="$2"
+    local -r dsc_file="$BUILD_DIR/openfasttrace_$version-$package_revision.dsc"
     local -r orig_tarball="$BUILD_DIR/openfasttrace_$version.orig.tar.gz"
-    local -r debian_tarball="$BUILD_DIR/openfasttrace_$version-1.debian.tar.xz"
+    local -r debian_tarball="$BUILD_DIR/openfasttrace_$version-$package_revision.debian.tar.xz"
 
     if [[ ! -f "$dsc_file" ]]; then
         echo "Error: Source package control file not found at $dsc_file." >&2
-        echo "Please run ./create-source-package.sh $version first." >&2
+        echo "Please run ./create-source-package.sh $version $package_revision first." >&2
         return 1
     fi
 
@@ -48,7 +57,8 @@ check_source_package_exists() {
 # [impl->dsn~build-orchestration-scripts~1]
 extract_source_package() {
     local -r version="$1"
-    local -r dsc_file="openfasttrace_${version}-1.dsc"
+    local -r package_revision="$2"
+    local -r dsc_file="openfasttrace_${version}-${package_revision}.dsc"
     local -r build_subdir="$BUILD_DIR/openfasttrace-$version"
 
     echo "Cleaning up any existing build directory $build_subdir..."
@@ -67,23 +77,25 @@ build_binary_package() {
 
 # [impl->dsn~build-orchestration-scripts~1]
 main() {
-    if [[ $# -ne 1 ]]; then
-        echo "Usage: $0 <version>" >&2
+    if [[ $# -lt 1 || $# -gt 2 ]]; then
+        echo "Usage: $0 <version> [package-revision]" >&2
         exit 1
     fi
 
     local -r version="$1"
+    local -r package_revision="${2:-1}"
     validate_version "$version"
+    validate_package_revision "$package_revision"
     
     verify_preconditions
     ensure_build_dir
-    check_source_package_exists "$version"
-    extract_source_package "$version"
+    check_source_package_exists "$version" "$package_revision"
+    extract_source_package "$version" "$package_revision"
     build_binary_package "$version"
 
     echo ""
-    echo "Binary package for version $version created successfully in $BUILD_DIR."
-    ls -l "$BUILD_DIR"/openfasttrace_"$version"-1_*.deb
+    echo "Binary package for version $version-$package_revision created successfully in $BUILD_DIR."
+    ls -l "$BUILD_DIR"/openfasttrace_"$version"-"$package_revision"_*.deb
 }
 
 main "$@"
