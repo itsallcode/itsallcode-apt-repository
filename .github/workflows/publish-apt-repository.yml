@@ -24,7 +24,7 @@ jobs:
     env:
       APT_REPOSITORY_SIGNING_KEY: ${{ secrets.APT_REPOSITORY_SIGNING_KEY }}
       APT_REPOSITORY_SIGNING_PASSPHRASE: ${{ secrets.APT_REPOSITORY_SIGNING_PASSPHRASE }}
-      EXPECTED_SIGNING_FINGERPRINT: ${{ vars.APT_REPOSITORY_SIGNING_FINGERPRINT }}
+      EXPECTED_SIGNING_FINGERPRINT: ${{ secrets.APT_REPOSITORY_SIGNING_FINGERPRINT }}
       GNUPGHOME: ${{ runner.temp }}/gnupg
 
     steps:
@@ -34,7 +34,7 @@ jobs:
           persist-credentials: false
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Install repository build tools
         run: |
@@ -44,7 +44,7 @@ jobs:
       - name: Import and verify repository signing key
         run: |
           if [[ -z "$EXPECTED_SIGNING_FINGERPRINT" ]]; then
-            echo "APT_REPOSITORY_SIGNING_FINGERPRINT repository variable is required." >&2
+            echo "APT_REPOSITORY_SIGNING_FINGERPRINT Actions secret is required." >&2
             exit 1
           fi
           mkdir --mode=0700 "$GNUPGHOME"
@@ -92,12 +92,12 @@ jobs:
             --pinentry-mode loopback --passphrase "$APT_REPOSITORY_SIGNING_PASSPHRASE" \
             --clearsign --output "$distribution_dir/InRelease" "$distribution_dir/Release"
           gpg --batch --armor --export "$signing_fingerprint" \
-            > "$site_dir/openfasttrace-archive-keyring.asc"
+            > "$site_dir/itsallcode-archive-keyring.asc"
           printf '%s\n' "$signing_fingerprint" \
-            > "$site_dir/openfasttrace-archive-keyring.fingerprint"
+            > "$site_dir/itsallcode-archive-keyring.fingerprint"
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ${{ runner.temp }}/site
 
@@ -112,4 +112,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
