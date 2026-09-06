@@ -28,9 +28,10 @@ On Debian or a derived distribution, install the tools listed by the preconditio
 ./check-preconditions.sh
 ./create-source-package.sh <version> [package-revision]
 ./create-binary-package.sh <version> [package-revision]
+./stage-apt-package.sh <version> [package-revision]
 ```
 
-The resulting artifacts are placed in `out/`. The scripts download the specified OpenFastTrace source release, incorporate this repository's `debian/` packaging metadata, and build the package.
+The build artifacts are placed in `out/`. The scripts download the specified OpenFastTrace source release, incorporate this repository's `debian/` packaging metadata, and build the package. `stage-apt-package.sh` validates the resulting source and binary packages, then copies them into the Debian archive pool under `apt-repository/` for inclusion in a package pull request.
 
 ## Project Information
 

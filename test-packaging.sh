@@ -71,6 +71,7 @@ run_shellcheck() {
         "check-preconditions.sh"
         "create-source-package.sh"
         "create-binary-package.sh"
+        "stage-apt-package.sh"
         "test-packaging.sh"
         "debian/static/usr/bin/oft"
     )
