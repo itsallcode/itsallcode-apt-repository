@@ -1,0 +1,53 @@
+name: Test APT repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  install-openfasttrace:
+    name: Install and run OpenFastTrace from APT
+    runs-on: ubuntu-26.04
+    permissions: {}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install the itsallcode.org archive key
+        run: |
+          sudo install --directory --mode=0755 /etc/apt/keyrings
+          curl --fail --silent --show-error --location \
+            https://apt.itsallcode.org/itsallcode-archive-keyring.asc \
+            | sudo gpg --dearmor --yes --output /etc/apt/keyrings/itsallcode-archive-keyring.gpg
+
+      - name: Print archive key expiration
+        run: |
+          key_expiration_epoch="$(gpg --show-keys --with-colons \
+            /etc/apt/keyrings/itsallcode-archive-keyring.gpg \
+            | awk -F: '$1 == "pub" { print $7; exit }')"
+          if [[ -z "$key_expiration_epoch" ]]; then
+            echo "The repository signing key has no expiration date."
+          else
+            echo "Repository signing key expires: $(date --utc --date="@$key_expiration_epoch" --iso-8601=seconds)"
+          fi
+
+      - name: Add the itsallcode.org APT repository
+        run: |
+          echo 'deb [signed-by=/etc/apt/keyrings/itsallcode-archive-keyring.gpg] https://apt.itsallcode.org stable main' \
+            | sudo tee /etc/apt/sources.list.d/itsallcode.list > /dev/null
+          sudo apt-get update
+
+      - name: Install the latest OpenFastTrace package
+        run: sudo apt-get install --yes openfasttrace
+
+      - name: Run OpenFastTrace help and print its version
+        run: |
+          help_output="$(oft --help)"
+          printf '%s\n' "$help_output"
+          oft_version="$(printf '%s\n' "$help_output" | sed --quiet --regexp-extended \
+            's/^OpenFastTrace ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')"
+          if [[ -z "$oft_version" ]]; then
+            echo "Could not find the OpenFastTrace version in 'oft --help' output." >&2
+            exit 1
+          fi
+          echo "OpenFastTrace version: $oft_version"
