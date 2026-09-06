@@ -43,6 +43,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes \
             appstream \
+            build-essential \
             curl \
             debhelper \
             devscripts \
@@ -53,6 +54,25 @@ jobs:
             pandoc \
             shellcheck \
             wget
+
+      - name: Configure Maven toolchain
+        run: |
+          jdk_home="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
+          mkdir --parents "$HOME/.m2"
+          cat > "$HOME/.m2/toolchains.xml" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <toolchains>
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>17</version>
+              </provides>
+              <configuration>
+                <jdkHome>$jdk_home</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
 
       - name: Create source package
         run: ./create-source-package.sh "$VERSION"
