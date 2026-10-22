@@ -4,7 +4,7 @@ This project creates the Debian source and binary package for [OpenFastTrace ](h
 
 ## Notation
 
-This specification uses the OFT requirement notation explained in the [OFT user guide](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md).
+This specification uses the OFT requirement notation explained in the [OFT user guide](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/user_guide.md).
 
 ## Goals
 
@@ -192,9 +192,9 @@ The binary package packs and declares the application screenshots from the upstr
 
 The image URLs are as follows: 
 
-1. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png
-2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png
-2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png
+1. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_tracing_report.png
+2. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_help.png
+3. https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_markdown_import_trace.png
 
 Covers:
 
@@ -245,7 +245,7 @@ Needs: dsn
 ### HTML User Guide in Binary Package
 `req~user-guide-html~1`
 
-The build process takes the file `doc/user_guide.md`, turns it into HTML and packages it into the binary package.
+The build process takes the file `doc/user_guide/user_guide.md`, turns it into HTML and packages it into the binary package.
 
 Covers:
 
@@ -253,10 +253,10 @@ Covers:
 
 Needs: dsn
 
-### Man Page User Guide in Binary Package
+### Man Page in Binary Package
 `req~user-guide-manpage~1`
 
-The build process takes the file `doc/user_guide.md`, turns it into a manpage and packages it into the binary package.
+The build process takes the file `doc/man/man_1.md`, turns it into a manpage and packages it into the binary package.
 
 Covers:
 

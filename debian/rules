@@ -5,9 +5,9 @@
 
 override_dh_auto_build:
 	mvn clean package -DskipTests
-	# Generate user guide in HTML and manpage formats
-	pandoc -s doc/user_guide.md -o user_guide.html
-	pandoc -s --metadata title="oft" --include-before-body=debian/oft.1.header doc/user_guide.md -t man -o oft.1
+	# Generate the HTML user guide and the manpage from their upstream sources
+	pandoc -s doc/user_guide/user_guide.md -o user_guide.html
+	pandoc -s --metadata title=oft --metadata section=1 --shift-heading-level-by=-1 doc/man/man_1.md -t man -o oft.1
 	gzip -9n oft.1
 
 override_dh_auto_install:

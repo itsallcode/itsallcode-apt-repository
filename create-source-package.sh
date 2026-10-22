@@ -51,7 +51,7 @@ download_source() {
 # [impl->dsn~package-screenshots~1]
 download_screenshots() {
     local -r screenshots_dir="debian/static/usr/share/metainfo/screenshots"
-    local -r raw_url="https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images"
+    local -r raw_url="https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images"
     local -r screenshots=(
         "oft_screenshot_tracing_report.png"
         "oft_screenshot_help.png"
