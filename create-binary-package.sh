@@ -71,7 +71,7 @@ extract_source_package() {
 # [impl->dsn~build-reproducibility~1]
 build_binary_package() {
     local -r build_subdir="$BUILD_DIR/openfasttrace-$1"
-    echo "Building binary package (including HTML and manpage user guide)..."
+    echo "Building binary package (including the HTML user guide and manpage)..."
     (cd "$build_subdir" && dpkg-buildpackage -us -uc -b)
 }
 

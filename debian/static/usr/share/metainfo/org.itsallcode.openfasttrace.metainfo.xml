@@ -19,15 +19,15 @@
   <screenshots>
     <screenshot type="default">
       <caption>OpenFastTrace tracing report</caption>
-      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_tracing_report.png</image>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_tracing_report.png</image>
     </screenshot>
     <screenshot>
       <caption>OpenFastTrace help output</caption>
-      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_help.png</image>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_help.png</image>
     </screenshot>
     <screenshot>
       <caption>OpenFastTrace Markdown import trace</caption>
-      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/images/oft_screenshot_markdown_import_trace.png</image>
+      <image type="source">https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/doc/assets/images/oft_screenshot_markdown_import_trace.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://github.com/itsallcode/openfasttrace</url>
@@ -39,6 +39,15 @@
   </developer>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="4.11.0" date="2026-10-18" type="stable">
+      <description>
+        <ul>
+          <li>Plugins can now be supplied at runtime through the Java API.</li>
+          <li>The source tag importer now supports Visual Basic files.</li>
+          <li>The user guide has automatic lateral navigation.</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.9.0" date="2026-09-05" type="stable">
       <description>
         <ul>

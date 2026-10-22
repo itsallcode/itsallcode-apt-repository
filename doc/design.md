@@ -4,7 +4,7 @@ This document describes the design of the OpenFastTrace Debian Package project.
 
 ## Notation
 
-This design uses the OFT requirement notation explained in the [OFT user guide](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md).
+This design uses the OFT requirement notation explained in the [OFT user guide](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/user_guide.md).
 
 Requirements in this document are always formulated in present as if they were already implemented. This fits with the idea that OFT specs are traced down to implementation and test and are also up to date.
 
@@ -163,17 +163,17 @@ Needs: impl, itest
 ### HTML User Guide
 `dsn~user-guide-html~1`
 
-The build process uses `pandoc` to convert the `doc/user_guide.md` file from the upstream source into an HTML version. This file is installed into the binary package at `/usr/share/doc/openfasttrace/user_guide.html`.
+The build process uses `pandoc` to convert the `doc/user_guide/user_guide.md` file from the upstream source into an HTML version. This file is installed into the binary package at `/usr/share/doc/openfasttrace/user_guide.html`.
 
 Covers:
 * [`req~user-guide-html~1`](system_requirements.md#html-user-guide-in-binary-package)
 
 Needs: impl, itest
 
-### Man Page User Guide
+### Man Page
 `dsn~user-guide-manpage~1`
 
-The build process uses `pandoc` to convert the `doc/user_guide.md` file from the upstream source into a manpage format. The generated manpage is installed into the binary package at `/usr/share/man/man1/oft.1.gz`.
+The build process uses `pandoc` to convert the `doc/man/man_1.md` file from the upstream source into a manpage format. The generated manpage is installed into the binary package at `/usr/share/man/man1/oft.1.gz`.
 
 Covers:
 * [`req~user-guide-manpage~1`](system_requirements.md#man-page-user-guide-in-binary-package)
