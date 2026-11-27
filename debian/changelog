@@ -1,3 +1,21 @@
+openfasttrace (4.12.0-1) unstable; urgency=medium
+
+  * This release includes several usability improvements to the
+    requirement ID and other syntax used in OpenFastTrace. For example,
+    the hash mark (#) can now be used in addition to the tilde (~) as a
+    revision separator. This prevents situations where the name part of
+    the ID is displayed as cross-out text in Markdown. Of course, the
+    previous double-tilde syntax remains valid.
+  * The source tag importer now supports JSX (.jsx) and TSX (.tsx)
+    source files, the file types of React components written in
+    JavaScript and TypeScript.
+  * #638: Allow hash mark in addition to tilde as revision separator
+  * #647: Add support for JSX and TSX in the source tag importer
+  * #561: Build and publish native binaries for Linux (x64 and arm64),
+    Windows (x64) and macOS (arm64)
+
+ -- itsallcode.org <maintainers@itsallcode.org>  Fri, 27 Nov 2026 13:20:06 +0100
+
 openfasttrace (4.11.0-1) unstable; urgency=medium
 
   * OFT now allows embedders to pass plugin JARs to OFT at runtime
